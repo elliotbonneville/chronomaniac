@@ -1,5 +1,5 @@
 import {throttle} from "lodash";
-import DisplayBuffer from "./displayBuffer";
+import buffer from "./displayBuffer";
 
 export default class Display {
 	constructor(element, settings = {}) {
@@ -16,15 +16,12 @@ export default class Display {
 			fontSize: 24
 		}, settings));
 
-		this.buffer = new DisplayBuffer();
 		this.nodes = {};
 
 		let {width, height, cellWidth, cellHeight, padding} = this.settings,
 			frag = document.createDocumentFragment();
 
-		this.resize();
-
-		this.buffer.rect(0, 0, width, height).forEach(cell => {
+		buffer.rect(0, 0, width, height).forEach(cell => {
 			let node = document.createElement("div");
 
 			node.style.height = cellHeight + "px";
@@ -34,6 +31,9 @@ export default class Display {
 			node.style.fontFamily = "VideoTerminalScreen";
 			node.style.fontSize = this.settings.fontSize + "px";
 			node.style.display = "none";
+			node.style.userSelect = "none";
+			node.style.webkitUserSelect = "none";
+			node.style.MozUserSelect = "none";
 			
 			node.style.position = "fixed";
 			node.style.left = cell.position.x * cellWidth + padding + "px";
@@ -44,19 +44,20 @@ export default class Display {
 
 		document.body.appendChild(frag);
 
+		this.resize();
 		this.render();
 
 		// bind render event listeners
-		this.buffer.on("render", this.render.bind(this));
+		buffer.on("render", this.render.bind(this));
 		window.addEventListener("resize", throttle(() => {
 			this.resize();
-			this.buffer.rect(0, 0, this.settings.width, this.settings.height).forEach(cell => this.buffer.dirty.push(cell));
+			buffer.rect(0, 0, this.settings.width, this.settings.height).forEach(cell => buffer.dirty.push(cell));
 			this.render();
 		}, 500));
 	}
 
 	render() {
-		this.buffer.dirty.forEach(cell => {
+		buffer.dirty.forEach(cell => {
 			let node = this.nodes[cell.position];
 
 			if (cell.position.x > this.size.width || cell.position.y > this.size.height) {
@@ -71,7 +72,7 @@ export default class Display {
 			node.style.color = cell.color;
 		});
 
-		this.buffer.dirty = [];
+		buffer.dirty = [];
 	}
 
 	resize() {
