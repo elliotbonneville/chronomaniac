@@ -1,4 +1,3 @@
-import buffer from "~/renderer/buffer";
 import Point from "./point";
 
 export default class Rect {
@@ -29,7 +28,7 @@ export default class Rect {
 	forEach(callback) {
 		for (let x = this.topLeft.x; x < this.bottomRight.x; x++) {
 			for (let y = this.topLeft.y; y < this.bottomRight.y; y++) {
-				callback(buffer.cell(x, y));
+				callback(new Point(x, y));
 			}
 		}
 	}
@@ -43,6 +42,10 @@ export default class Rect {
 			other.bottomRight.x < this.topLeft.x ||
 			other.topLeft.y > this.bottomRight.y ||
 			other.bottomRight.y < this.topLeft.y);
+	}
+
+	toString() {
+		return this.topLeft + ":" + this.bottomRight;
 	}
 
 	get width() {

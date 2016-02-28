@@ -9,7 +9,6 @@ export default class Cell {
 
 		this.position = position;
 		this._backgroundColor = backgroundColor;
-		this._buffer = buffer;
 		this._character = character;
 		this._color = color;
 	}
@@ -20,7 +19,7 @@ export default class Cell {
 
 	set backgroundColor(backgroundColor) {
 		this._backgroundColor = backgroundColor;
-		this._buffer.dirty.push(this);
+		this._view._dirty.push(this);
 	}
 
 	get character() {
@@ -33,7 +32,7 @@ export default class Cell {
 		}
 
 		this._character = character;
-		this._buffer.dirty.push(this);
+		this._view._dirty.push(this);
 	}
 
 	get color() {
@@ -42,6 +41,6 @@ export default class Cell {
 
 	set color(color) {
 		this._color = color;
-		this._buffer.dirty.push(this);
+		this._view._dirty.push(this);
 	}
 }

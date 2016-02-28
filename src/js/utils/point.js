@@ -44,7 +44,14 @@ export default class Point {
 		return this.x === other.x && this.y === other.y;
 	}
 
+	in(rect) {
+		return this.x >= rect.topLeft.x &&
+			this.x < rect.bottomRight.x &&
+			this.y >= rect.topLeft.y &&
+			this.y < rect.bottomRight.y;
+	}
+
 	toString() {
-		return this.x + " " + this.y;
+		return this.x + "," + this.y;
 	}
 }
