@@ -1,0 +1,47 @@
+{
+  "name": "Arel",
+  "version": "0.0.1",
+  "description": "A Roguelike built with React and ES6.",
+  "main": "src/js/app.js",
+  "scripts": {
+    "build:dev": "npm run lint && rm -r -f dist && webpack -d",
+    "build:prod": "npm run lint && rm -r -f dist && webpack -p",
+    "lint": "node node_modules/eslint/bin/eslint.js app/**.js*; exit 0",
+    "start": "mkdir -p dist; webpack-dev-server --hot --inline --content-base dist/ & npm run watch-css",
+    "watch-css": "nodemon -e scss -x \"node scripts/buildSass dist/app.css\""
+  },
+  "author": "Elliot Bonneville",
+  "private": true,
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-core": "^6.4.0",
+    "babel-loader": "^6.2.1",
+    "babel-plugin-lodash": "^2.0.1",
+    "babel-plugin-module-alias": "^1.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "babel-root-import": "^3.1.0",
+    "eslint": "^1.10.3",
+    "eslint-loader": "^1.2.0",
+    "eslint-plugin-react": "^3.15.0",
+    "file-loader": "^0.8.5",
+    "jshint": "^2.9.1",
+    "node-sass": "^3.4.2",
+    "nodemon": "^1.8.1",
+    "react-hot-loader": "^1.3.0",
+    "source-map-loader": "^0.1.5",
+    "svg-inline-loader": "^0.4.0",
+    "webpack": "^1.12.13",
+    "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "classnames": "^2.2.3",
+    "immutable": "^3.7.6",
+    "lodash": "^4.2.1",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "svg-inline-react": "^0.3.1"
+  }
+}
