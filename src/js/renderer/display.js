@@ -1,5 +1,6 @@
 import {throttle} from "lodash";
-import buffer from "./displayBuffer";
+import buffer from "./buffer";
+import Rect from "~/utils/rect";
 
 export default class Display {
 	constructor(element, settings = {}) {
@@ -21,7 +22,7 @@ export default class Display {
 		let {width, height, cellWidth, cellHeight, padding} = this.settings,
 			frag = document.createDocumentFragment();
 
-		buffer.rect(0, 0, width, height).forEach(cell => {
+		new Rect(0, 0, width, height).forEach(cell => {
 			let node = document.createElement("div");
 
 			node.style.height = cellHeight + "px";

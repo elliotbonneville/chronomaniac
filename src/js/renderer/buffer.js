@@ -14,19 +14,12 @@ let buffer = Object.assign({}, EventEmitter.prototype, {
 
 	cell: function () {
 		let pos = Point.read(arguments);
-		return this.cells[pos.x][pos.y];
-	},
 
-	rect: function (x1, y1, x2, y2) {
-		return {
-			forEach: callback => {
-				for (let x = x1; x < x2; x++) {
-					for (let y = y1; y < y2; y++) {
-						callback(this.cell(x, y));
-					}
-				}
-			}
-		};
+		if (!pos) {
+			throw new TypeError("Invalid argument(s) supplied");
+		}
+
+		return this.cells[pos.x][pos.y];
 	}
 });
 
