@@ -1,20 +1,26 @@
 export default class Cell {
-	constructor(x, y, character = ".", color = "white") {
-		this.dirty = true;
-		this._x = x;
-		this._y = y;
+	constructor(
+			buffer,
+			position,
+			character = ".",
+			color = "white",
+			backgroundColor = "black"
+		) {
+
+		this.position = position;
+		this._backgroundColor = backgroundColor;
+		this._buffer = buffer;
 		this._character = character;
 		this._color = color;
 	}
 
-	render() {
-		this.dirty = false;
-		return {
-			x: this._x,
-			y: this._y,
-			character: this.character,
-			color: this.color
-		};
+	get backgroundColor() {
+		return this._backgroundColor;
+	}
+
+	set backgroundColor(backgroundColor) {
+		this._backgroundColor = backgroundColor;
+		this._buffer.dirty.push(this);
 	}
 
 	get character() {
@@ -22,16 +28,12 @@ export default class Cell {
 	}
 
 	set character(character) {
-		if (!character) {
-			return;
-		}
-
 		if (character.length > 1) {
 			throw new TypeError("Cell can only contain one character.");
 		}
 
 		this._character = character;
-		this.dirty = true;
+		this._buffer.dirty.push(this);
 	}
 
 	get color() {
@@ -40,6 +42,6 @@ export default class Cell {
 
 	set color(color) {
 		this._color = color;
-		this.dirty = true;
+		this._buffer.dirty.push(this);
 	}
 }

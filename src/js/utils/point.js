@@ -22,9 +22,6 @@ export default class Point {
 	}
 
 	static random(x = 1, y = 1) {
-		var r1 = Math.random(),
-			r2 = Math.random();
-
 		return new Point(Math.floor(Math.random() * x), Math.floor(Math.random() * y));
 	}
 
@@ -34,5 +31,9 @@ export default class Point {
 
 	get y() {
 		return this._y;
+	}
+
+	toString() {
+		return this.x + " " + this.y;
 	}
 }

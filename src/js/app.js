@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "~/components/App.react";
+
+import Display from "~/renderer/display";
 
 function create(container) {
-	ReactDOM.render(<App />, container);
+	window.display = new Display(container);
 };
 
 module.exports = {
