@@ -51,7 +51,12 @@ export default class Point {
 	}
 
 	in(rect) {
-		if (arguments.length > 1) {
+		if (typeof rect === "undefined") {
+			console.warn("Unknown value passed to Point.in.");
+			return false;
+		}
+
+		if (arguments.length > 1 || !(arguments[0] instanceof Rect)) {
 			return this.in(Rect.read(arguments));
 		}
 
