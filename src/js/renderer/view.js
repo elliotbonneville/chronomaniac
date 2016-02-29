@@ -10,10 +10,14 @@ export default class View {
 
 		this.rect = rect;
 		this._dirty = [];
-		this._cells = buffer.registerView(this);
+		buffer.registerView(this);
 
 		// make all cells that have just been added to this view dirty, so they render
-		this.forEach((cell) => this._dirty.push(cell));
+		this.forEach((cell) => this._dirty.push(cell._setView(this)));
+	}
+
+	_giveCells(cells) {
+		this._cells = cells;
 	}
 
 	cell() {
@@ -23,17 +27,16 @@ export default class View {
 			throw new TypeError(`Cell ${pos} is outside view (bounds are ${this.rect}).`);
 			return;
 		}
-
-		let cell = this._cells[pos.x][pos.y];
-		if (cell._view !== this) {
-			cell._view = this;
-		}
-
-		return cell;
+		
+		return this._cells[pos.x][pos.y];
 	}
 
 	forEach(callback) {
-		this.rect.forEach((p) => callback(this.cell(p), p));
+		this.rect.forEach(p => callback(this.cell(p)));
 		return this;
+	}
+
+	makeDirty() {
+		this.forEach(cell => this._dirty.push(cell));
 	}
 }

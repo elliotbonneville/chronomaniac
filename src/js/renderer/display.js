@@ -3,11 +3,7 @@ import buffer from "./buffer";
 import View from "./view";
 
 export default class Display {
-	constructor(element, settings = {}) {
-		if (!element) {
-			throw new TypeError("No element passed to Display.");
-		}
-
+	constructor(settings = {}) {
 		this.settings = Object.freeze(Object.assign({
 			width: 50,
 			height: 50,
@@ -60,7 +56,7 @@ export default class Display {
 		buffer.on("render", this.render.bind(this));
 		window.addEventListener("resize", throttle(() => {
 			this.resize();
-			buffer.rect(0, 0, this.settings.width, this.settings.height).forEach(cell => buffer.dirty.push(cell));
+			this.views.forEach(view => view.makeDirty());
 			this.render();
 		}, 500));
 	}
@@ -81,6 +77,8 @@ export default class Display {
 				node.style.backgroundColor = cell.backgroundColor;
 				node.style.color = cell.color;
 			});
+
+			view._dirty = [];
 		});
 	}
 

@@ -1,6 +1,5 @@
 export default class Cell {
 	constructor(
-			buffer,
 			position,
 			character = ".",
 			color = "white",
@@ -42,5 +41,10 @@ export default class Cell {
 	set color(color) {
 		this._color = color;
 		this._view._dirty.push(this);
+	}
+
+	_setView(view) {
+		this._view = view;
+		return this;
 	}
 }

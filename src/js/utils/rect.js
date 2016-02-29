@@ -14,7 +14,7 @@ export default class Rect {
 		}
 
 		if (!(topLeft instanceof Point) || !(bottomRight instanceof Point)) {
-			throw new TypeError("Rect got some crappy arguments. Check yourself m8.");
+			throw new TypeError("Rect got some crappy arguments. Check yourself, m8.");
 		}
 
 		this.topLeft = topLeft;

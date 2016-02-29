@@ -12,17 +12,14 @@ let buffer = Object.assign({}, EventEmitter.prototype, {
 		height: 50
 	},
 
-	registerView: function (view) {
-		_views.push(view);
-		return _cells;
-	}
+	registerView: (view) => _views.push(view._giveCells(_cells))
 });
 
 for (let x = 0; x < buffer.settings.width; x++) {
 	_cells[x] = [];
 
 	for (let y = 0; y < buffer.settings.height; y++) {
-		_cells[x][y] = new Cell(buffer, new Point(x, y));
+		_cells[x][y] = new Cell(new Point(x, y));
 	}
 }
 

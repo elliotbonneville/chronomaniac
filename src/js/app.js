@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import Display from "~/renderer/display";
 
 function create(container) {
-	window.display = new Display(container);
+	window.display = new Display();
 };
 
 module.exports = {
