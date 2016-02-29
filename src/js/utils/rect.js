@@ -21,6 +21,18 @@ export default class Rect {
 		this.bottomRight = bottomRight;
 	}
 
+	static read(args) {
+		if (args[0] instanceof Point && args[1] instanceof Point) {
+			return new Rect(args[0].x, args[0].y, args[1].x, args[1].y);
+		} else if ([...args].every(arg => !isNaN(arg)) && args.length === 4) {
+			return new Rect(args[0], args[1], args[2], args[3]);
+		} else if (args[0] instanceof Rect) {
+			return args[0];
+		}
+
+		return undefined;
+	}
+
 	equals(other) {
 		return this.topLeft.equals(other.topLeft) && this.bottomRight.equals(other.bottomRight);
 	}

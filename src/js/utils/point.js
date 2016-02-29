@@ -1,11 +1,13 @@
+import Rect from "~/utils/rect";
+
 export default class Point {
 	constructor(x, y) {
 		if (!new.target) {
 			return new Point(x, y);
 		}
 
-		this._x = x.x || x;
-		this._y = x.y || y;
+		this._x = typeof x.x === "undefined" ? x : x.x;
+		this._y = typeof x.y === "undefined" ? y : x.y;
 	}
 
 	static read(args) {
@@ -40,11 +42,19 @@ export default class Point {
 		return this._y;
 	}
 
+	clone() {
+		return new Point(this);
+	}
+
 	equals(other) {
 		return this.x === other.x && this.y === other.y;
 	}
 
 	in(rect) {
+		if (arguments.length > 1) {
+			return this.in(Rect.read(arguments));
+		}
+
 		return this.x >= rect.topLeft.x &&
 			this.x < rect.bottomRight.x &&
 			this.y >= rect.topLeft.y &&

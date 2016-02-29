@@ -3,11 +3,12 @@ import Rect from "~/utils/rect";
 import buffer from "~/renderer/buffer";
 
 export default class View {
-	constructor(rect) {
+	constructor(rect, coordinates) {
 		if (!(rect instanceof Rect)) {
 			rect = new (Function.prototype.bind.apply(Rect, [null, ...arguments]));
 		}
 
+		this.coordinates = coordinates || rect.topLeft.clone();
 		this.rect = rect;
 		this._dirty = [];
 		buffer.registerView(this);
