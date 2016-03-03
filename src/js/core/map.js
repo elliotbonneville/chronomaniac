@@ -11,8 +11,6 @@ export default class Map extends EventHandler {
 			width: 50,
 			height: 50
 		}, options);
-
-		this.generate();
 	}
 
 	generate() {
@@ -24,6 +22,8 @@ export default class Map extends EventHandler {
 				this.tiles[x][y] = new FloorTile(this);
 			}
 		}
+
+		this.emit("redraw");
 	}
 
 	tile() {

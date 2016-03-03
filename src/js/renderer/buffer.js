@@ -18,6 +18,16 @@ let buffer = Object.assign({}, EventEmitter.prototype, {
 			render: buffer.render
 		};
 	},
+
+	init: function () {
+		for (let x = 0; x < buffer.settings.width; x++) {
+			_cells[x] = [];
+
+			for (let y = 0; y < buffer.settings.height; y++) {
+				_cells[x][y] = new Cell(new Point(x, y));
+			}
+		}
+	}
 });
 
 buffer.render = debounce(() => {
@@ -25,13 +35,5 @@ buffer.render = debounce(() => {
 }, 14, {
 	trailing: true
 });
-
-for (let x = 0; x < buffer.settings.width; x++) {
-	_cells[x] = [];
-
-	for (let y = 0; y < buffer.settings.height; y++) {
-		_cells[x][y] = new Cell(new Point(x, y));
-	}
-}
 
 export default buffer;

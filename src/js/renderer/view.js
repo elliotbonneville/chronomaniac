@@ -19,6 +19,10 @@ export default class View {
 
 		// listen to the map for changes
 		this.map.on("update", tile => this.cell(tile.position.add(this.coordinates)).update(tile));
+		this.map.on("redraw", () => {
+			this.makeDirty();
+			this._render();
+		});
 	}
 
 	cell() {

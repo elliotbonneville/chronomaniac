@@ -17,8 +17,11 @@ export default class Display {
 			fontSize: 24
 		}, settings));
 
+		buffer.settings = Object.assign(buffer.settings, settings);
+		buffer.init();
+
 		this.nodes = {};
-		this.views = [];
+		this.views = {};
 
 		let {width, height, cellWidth, cellHeight, padding} = this.settings,
 			frag = document.createDocumentFragment();
@@ -50,9 +53,6 @@ export default class Display {
 		// append them to the body
 		document.body.appendChild(frag);
 
-		// create a view that we can render
-		this.views.push(new View(new Rect(0, 0, width, height), this.settings.map));
-
 		this.resize();
 		this.render();
 
@@ -60,17 +60,31 @@ export default class Display {
 		buffer.on("render", this.render.bind(this));
 		window.addEventListener("resize", throttle(() => {
 			this.resize();
-			this.views.forEach(view => view.makeDirty());
+			
+			for (let viewName in this.views) {
+				this.views[viewName].makeDirty();
+			}
+
 			this.render();
 		}, 500));
 	}
 
+	addView(name, view) {
+		this.views[name] = view;
+	}
+
+	clear() {
+		this.views = {};
+	}
+
 	render() {
-		this.views.forEach(view => {
+		for (let viewName in this.views) {
+			let view = this.views[viewName];
+
 			if (!view._dirty.length) {
 				return;
 			}
-			
+
 			view._dirty.forEach(cell => {
 				let node = this.nodes[cell.position];
 
@@ -87,7 +101,7 @@ export default class Display {
 			});
 
 			view._dirty = [];
-		});
+		};
 	}
 
 	resize() {
