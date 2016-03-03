@@ -42,7 +42,8 @@ export default class Point {
 		return this._y;
 	}
 
-	add(other) {
+	add() {
+		let other = Point.read(arguments);
 		return new Point(this.x + other.x, this.y + other.y);
 	}
 

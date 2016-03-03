@@ -26,6 +26,11 @@ export default class Map extends EventHandler {
 		}
 	}
 
+	tile() {
+		let p = Point.read(arguments);
+		return this.tiles[p.x] ? this.tiles[p.x][p.y] : null;
+	}
+
 	update(tile) {
 		this.emit("update", tile);
 	}
