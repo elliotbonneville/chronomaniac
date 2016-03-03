@@ -67,6 +67,10 @@ export default class Display {
 
 	render() {
 		this.views.forEach(view => {
+			if (!view._dirty.length) {
+				return;
+			}
+			
 			view._dirty.forEach(cell => {
 				let node = this.nodes[cell.position];
 
