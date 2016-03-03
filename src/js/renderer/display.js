@@ -1,4 +1,8 @@
 import {throttle} from "lodash";
+
+import Rect from "~/utils/rect";
+import Point from "~/utils/point";
+
 import buffer from "./buffer";
 import View from "./view";
 
@@ -47,7 +51,7 @@ export default class Display {
 		document.body.appendChild(frag);
 
 		// create a view that we can render
-		this.views.push(new View(0, 0, width, height));
+		this.views.push(new View(new Rect(0, 0, width, height), this.settings.map));
 
 		this.resize();
 		this.render();

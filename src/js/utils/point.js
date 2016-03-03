@@ -42,6 +42,10 @@ export default class Point {
 		return this._y;
 	}
 
+	add(other) {
+		return new Point(this.x + other.x, this.y + other.y);
+	}
+
 	clone() {
 		return new Point(this);
 	}

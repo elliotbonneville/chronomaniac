@@ -3,31 +3,28 @@ import Rect from "~/utils/rect";
 import buffer from "~/renderer/buffer";
 
 export default class View {
-	constructor(rect, coordinates) {
-		if (!(rect instanceof Rect)) {
-			rect = new (Function.prototype.bind.apply(Rect, [null, ...arguments]));
-		}
-
-		this.coordinates = coordinates || rect.topLeft.clone();
+	constructor(rect, map) {
+		this.coordinates = new Point(0, 0);
 		this.rect = rect;
+		this.map = map;
+
 		this._dirty = [];
-		buffer.registerView(this);
+
+		let {cells, render} = buffer.registerView(this);
+		this._cells = cells;
+		this._render = render;
 
 		// make all cells that have just been added to this view dirty, so they render
 		this.forEach((cell) => this._dirty.push(cell._setView(this)));
-	}
 
-	_giveCells(cells) {
-		this._cells = cells;
+		// listen to the map for changes
+		this.map.on("update", tile => this.cell(tile.position.add(this.coordinates)).update(tile));
 	}
 
 	cell() {
 		let pos = Point.read(arguments);
 
-		if (!pos || !pos.in(this.rect)) {
-			throw new TypeError(`Cell ${pos} is outside view (bounds are ${this.rect}).`);
-			return;
-		}
+		if (!pos || !pos.in(this.rect)) return Cell.Null;
 		
 		return this._cells[pos.x][pos.y];
 	}
@@ -39,5 +36,10 @@ export default class View {
 
 	makeDirty() {
 		this.forEach(cell => this._dirty.push(cell));
+	}
+
+	update(cell) {
+		this._dirty.push(cell);
+		this._render();
 	}
 }

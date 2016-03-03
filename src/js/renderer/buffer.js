@@ -1,10 +1,10 @@
 import EventEmitter from "events";
+import {throttle} from "lodash";
 
 import Cell from "./cell";
 import Point from "~/utils/point";
 
-let _cells = [],
-	_views = [];
+let _cells = [];
 
 let buffer = Object.assign({}, EventEmitter.prototype, {
 	settings: {
@@ -12,7 +12,12 @@ let buffer = Object.assign({}, EventEmitter.prototype, {
 		height: 50
 	},
 
-	registerView: (view) => _views.push(view._giveCells(_cells))
+	registerView: () => {
+		return {
+			cells: _cells, 
+			render: throttle(() => buffer.emit("render"), 1000 / 60)
+		};
+	},
 });
 
 for (let x = 0; x < buffer.settings.width; x++) {
