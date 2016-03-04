@@ -1,3 +1,5 @@
+import {sample} from "lodash";
+
 const colorNames = {
     "aliceblue": [240, 248, 255],
     "antiquewhite": [250, 235, 215],
@@ -145,7 +147,9 @@ export default class Color {
 	constructor(r, g, b, a) {
 		let args = [...arguments];
 
-		if (arguments.length === 1) {
+		if (arguments.length === 0) {
+			return new Color(sample(colorNames));
+		} else if (arguments.length === 1) {
 			if (colorNames[args[0]]) {
 				args[0] = colorNames[args[0]];
 			}
