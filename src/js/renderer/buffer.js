@@ -7,6 +7,7 @@ import Point from "~/utils/point";
 let _cells = [];
 
 let buffer = Object.assign({}, EventEmitter.prototype, {
+	// gets overwritten by Display later
 	settings: {
 		width: 50,
 		height: 50

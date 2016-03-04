@@ -62,7 +62,7 @@ export default class Display {
 			this.resize();
 			
 			for (let viewName in this.views) {
-				this.views[viewName].makeDirty();
+				this.views[viewName]._makeDirty();
 			}
 
 			this.render();
@@ -82,7 +82,7 @@ export default class Display {
 			let view = this.views[viewName];
 
 			if (!view._dirty.length) {
-				return;
+				continue;
 			}
 
 			view._dirty.forEach(cell => {

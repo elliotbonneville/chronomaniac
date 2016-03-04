@@ -74,9 +74,14 @@ export default class Cell {
 	}
 
 	update(tile) {
-		this._character = tile.character;
-		this._color = tile.color;
-		this._backgroundColor = tile.backgroundColor;
+		if (!tile) {
+			return;
+		}
+
+		if (tile.character) this._character = tile.character;
+		if (tile.color) this._color = tile.color;
+		if (tile.backgroundColor) this._backgroundColor = tile.backgroundColor;
+		
 		this._view.update(this);
 	}
 }

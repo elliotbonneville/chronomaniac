@@ -71,6 +71,11 @@ export default class Point {
 			this.y < rect.bottomRight.y;
 	}
 
+	subtract() {
+		let other = Point.read(arguments);
+		return new Point(this.x - other.x, this.y - other.y);
+	}
+
 	toString() {
 		return this.x + "," + this.y;
 	}
