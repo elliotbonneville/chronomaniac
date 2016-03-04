@@ -1,4 +1,5 @@
 import Point from "~/utils/point";
+import Color from "~/renderer/color";
 
 export default class Tile {
 	constructor(map) {
@@ -11,8 +12,8 @@ export default class Tile {
 		this._actor = null;
 		
 		this._character = "";
-		this._color = "white";
-		this._backgroundColor = "black";
+		this._color = new Color("white");
+		this._backgroundColor = new Color("black");
 	}
 
 	get character() {

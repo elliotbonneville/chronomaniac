@@ -1,11 +1,12 @@
 import {noop} from "lodash";
+import Color from "~/renderer/color";
 
 export default class Cell {
 	constructor(
 			position,
 			character = ".",
-			color = "white",
-			backgroundColor = "black"
+			color = new Color("white"),
+			backgroundColor = new Color("black")
 		) {
 
 		this.position = position;

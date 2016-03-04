@@ -96,8 +96,8 @@ export default class Display {
 				}
 
 				node.innerHTML = cell.character;
-				node.style.backgroundColor = cell.backgroundColor;
-				node.style.color = cell.color;
+				node.style.backgroundColor = cell.backgroundColor.toString();
+				node.style.color = cell.color.toString();
 			});
 
 			view._dirty = [];
