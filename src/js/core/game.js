@@ -11,7 +11,7 @@ import Player from "~/actor/player";
 
 import WatchUI from "~/ui/watch.ui";
 
-import {bindEvents} from "~/core/eventHandling";
+import input from "~/core/input";
 
 export default class Game {
 	constructor() {
@@ -25,7 +25,7 @@ export default class Game {
 		this.begin();
 
 		// and finally bind keyboard handlers
-		bindEvents(this);
+		this.input = input.init(this);
 	}
 
 	begin() {
@@ -68,5 +68,7 @@ export default class Game {
 		// make any mobs move
 
 		// save game state
+		
+		this.input.waiting = false;
 	}
 }
