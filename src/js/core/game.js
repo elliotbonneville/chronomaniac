@@ -23,10 +23,10 @@ export default class Game {
 
 		// create a new map
 		this.map = new GameMap();
-		this.map.generate();
 
 		// create a new view for the map
 		this.display.addView("map", new View(new Rect(0, 0, this.settings.width, this.settings.height), this.map));
+		this.map.generate();
 
 		// and render the new stuff
 		this.display.render();

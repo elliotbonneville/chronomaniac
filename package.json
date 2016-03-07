@@ -37,6 +37,8 @@
     "classnames": "^2.2.3",
     "immutable": "^3.7.6",
     "lodash": "^4.2.1",
-    "mousetrap": "^1.5.3"
+    "mousetrap": "^1.5.3",
+    "noisejs": "^2.1.0",
+    "proc-noise": "0.0.1"
   }
 }

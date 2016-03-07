@@ -37,7 +37,9 @@ export default class View {
 	cell() {
 		let pos = Point.read(arguments);
 
-		if (!pos || !pos.in(this.rect)) return Cell.Null;
+		if (!pos || !pos.in(this.rect)) {
+			return Cell.Null;
+		}
 		
 		return this._cells[pos.x][pos.y];
 	}
@@ -57,7 +59,6 @@ export default class View {
 	}
 
 	update(cell) {
-		console.log(cell);
 		this._dirty.push(cell);
 		this._render();
 	}

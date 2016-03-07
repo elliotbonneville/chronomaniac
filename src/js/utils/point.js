@@ -51,6 +51,13 @@ export default class Point {
 		return new Point(this);
 	}
 
+	distance(other) {
+		let dx = other.x - this.x,
+			dy = other.y - this.y;
+		
+		return Math.abs(Math.sqrt((dx * dx) + (dy * dy)));
+	}
+
 	equals(other) {
 		return this.x === other.x && this.y === other.y;
 	}
@@ -69,6 +76,10 @@ export default class Point {
 			this.x < rect.bottomRight.x &&
 			this.y >= rect.topLeft.y &&
 			this.y < rect.bottomRight.y;
+	}
+
+	manhattan(other) {
+		return(Math.abs(this.x - other.x) + Math.abs(this.y - other.y));
 	}
 
 	subtract() {

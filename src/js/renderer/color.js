@@ -210,6 +210,6 @@ export default class Color {
 	}
 
 	toString() {
-		return `rgba(${this.r},${this.g},${this.b},${this.a})`;
+		return `rgba(${Math.round(this.r)},${Math.round(this.g)},${Math.round(this.b)},${this.a})`;
 	}
 }
