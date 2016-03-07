@@ -1,6 +1,6 @@
 import Display from "~/renderer/display";
 import View from "~/renderer/view";
-import Map from "~/core/map";
+import GameMap from "~/map/map";
 
 import Rect from "~/utils/rect";
 import Point from "~/utils/point";
@@ -22,7 +22,7 @@ export default class Game {
 		this.display.clear();
 
 		// create a new map
-		this.map = new Map();
+		this.map = new GameMap();
 		this.map.generate();
 
 		// create a new view for the map

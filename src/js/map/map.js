@@ -2,6 +2,7 @@ import EventHandler from "events";
 import Point from "~/utils/point";
 
 import FloorTile from "~/tiles/floor.tile";
+import generateCellularAutomata from "~/map/generators/cellularAutomata";
 
 export default class Map extends EventHandler {
 	constructor(options) {
@@ -23,6 +24,7 @@ export default class Map extends EventHandler {
 			}
 		}
 
+		generateCellularAutomata(this);
 		this.emit("redraw");
 	}
 

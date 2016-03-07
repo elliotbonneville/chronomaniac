@@ -75,6 +75,7 @@ export default class Cell {
 	}
 
 	update(tile) {
+		console.log(tile);
 		if (!tile) {
 			return;
 		}

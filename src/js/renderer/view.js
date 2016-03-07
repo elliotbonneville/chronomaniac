@@ -57,6 +57,7 @@ export default class View {
 	}
 
 	update(cell) {
+		console.log(cell);
 		this._dirty.push(cell);
 		this._render();
 	}
