@@ -36,13 +36,13 @@ export default class Actor {
 	}
 
 	do(action, save) {
-		let inverseAction = action.apply(this);
+		let occurred = action.apply(this);
 
-		if (save !== false) {
-			this.history.push(inverseAction);
+		if (save !== false && occurred) {
+			this.history.push(action);
 		}
 
-		return typeof inverseAction !== "undefined";
+		return occurred;
 	}
 
 	render() {
