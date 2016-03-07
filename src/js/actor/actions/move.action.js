@@ -12,10 +12,9 @@ export default class MoveAction extends Action {
 
 		if (tile.walkable) {
 			actor.position = newPos;
+			return {
+				direction: this.data.direction.inverse()
+			};
 		}
-
-		return {
-			direction: this.data.direction.inverse()
-		};
 	}
 }

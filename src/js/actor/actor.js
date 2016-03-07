@@ -7,8 +7,8 @@ export default class Actor {
 		this._position = position;
 		this._character = "@";
 		this._color = new Color("white");
-		
-		this.pastActions = [];
+
+		this.history = [];
 
 		this.tile.actor = this;
 	}
@@ -35,8 +35,14 @@ export default class Actor {
 		return this.map.tile(this.position);
 	}
 
-	do(action) {
-		this.pastActions.push(action.apply(this));
+	do(action, save) {
+		let inverseAction = action.apply(this);
+
+		if (save !== false) {
+			this.history.push(inverseAction);
+		}
+
+		return typeof inverseAction !== "undefined";
 	}
 
 	render() {
