@@ -44,6 +44,8 @@ export default class Game {
 		this.map.light.calculate(lamp);
 		this.player = new Player(this.map, tile);
 
+		this.display.views.map.origin = tile.subtract(5, 5);
+
 		// and render the new stuff
 		this.display.render();
 	}

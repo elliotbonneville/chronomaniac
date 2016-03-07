@@ -20,7 +20,11 @@ export default class View {
 		this.forEach((cell) => this._dirty.push(cell._setView(this)));
 
 		// listen to the map for changes
-		this.map.on("update", tile => this.cell(tile.position.add(this.rect.topLeft).add(this.origin)).update(tile));
+		this.map.on("update", tile => {
+			let cell = this.cell(tile.position.add(this.rect.topLeft).add(this.origin));
+			if (cell) cell.update(tile);
+		});
+
 		this.map.on("redraw", this.render.bind(this));
 	}
 
