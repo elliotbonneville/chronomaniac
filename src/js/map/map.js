@@ -41,7 +41,6 @@ export default class Map extends EventHandler {
 		height = this.options.height
 	) {
 		let p = Point.random(width, height);
-		console.log(this.tile(p));
 		while (!(this.tile(p) instanceof tileType)) {
 			p = Point.random(width, height);
 		}

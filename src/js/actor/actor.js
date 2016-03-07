@@ -7,6 +7,8 @@ export default class Actor {
 		this._position = position;
 		this._character = "@";
 		this._color = new Color("white");
+		
+		this.pastActions = [];
 
 		this.tile.actor = this;
 	}
@@ -33,8 +35,8 @@ export default class Actor {
 		return this.map.tile(this.position);
 	}
 
-	move() {
-
+	do(action) {
+		this.pastActions.push(action.apply(this));
 	}
 
 	render() {

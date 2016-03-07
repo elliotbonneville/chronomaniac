@@ -24,6 +24,7 @@ export default class Tile {
 
 		this.opaque = false;
 		this.lighting = [];
+		this.walkable = true;
 	}
 
 	get character() {

@@ -10,6 +10,7 @@ export default class WallTile extends Tile {
 		this._backgroundColor = new Color("black");
 
 		this.opaque = true;
+		this.walkable = false;
 
 		this.map.update(this);
 	}

@@ -78,6 +78,10 @@ export default class Point {
 			this.y < rect.bottomRight.y;
 	}
 
+	inverse() {
+		return new Point(this.x * -1, this.y * -1);
+	}
+
 	manhattan(other) {
 		return(Math.abs(this.x - other.x) + Math.abs(this.y - other.y));
 	}

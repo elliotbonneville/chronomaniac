@@ -9,6 +9,8 @@ import Point from "~/utils/point";
 import {Light} from "~/map/light";
 import Player from "~/actor/player";
 
+import {bindEvents} from "~/core/eventHandling";
+
 export default class Game {
 	constructor() {
 		this.settings = Object.freeze({
@@ -19,6 +21,9 @@ export default class Game {
 		// create a new display as well, the first time the page is loaded
 		this.display = new Display(this.settings);
 		this.begin();
+
+		// and finally bind keyboard handlers
+		bindEvents(this);
 	}
 
 	begin() {
@@ -37,9 +42,13 @@ export default class Game {
 			lamp = new Light(tile, 10, new Color("orange"));
 
 		this.map.light.calculate(lamp);
-		let player = new Player(this.map, tile);
+		this.player = new Player(this.map, tile);
 
 		// and render the new stuff
 		this.display.render();
+	}
+
+	tick() {
+
 	}
 }
