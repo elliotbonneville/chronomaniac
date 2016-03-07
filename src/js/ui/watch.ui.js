@@ -9,7 +9,7 @@ export default class WatchUI extends UI {
 		super(settings);
 	}
 
-	generate() {
+	draw() {
 		let center = new Point(5, 5);
 
 		// get circle that represents watch face

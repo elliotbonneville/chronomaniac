@@ -46,7 +46,7 @@ export default class Game {
 		this.display.addView("map", new View(new Rect(0, 0, 30, 30), this.map));
 		this.display.addView("watch", new View(new Rect(31, 0, 42, 13), this.watch));
 		this.map.generate();
-		this.watch.generate();
+		this.watch.draw();
 
 		// make da player
 		let tile = this.map.randomTile(undefined, 15, 15);
