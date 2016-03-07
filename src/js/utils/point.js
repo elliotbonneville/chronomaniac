@@ -51,8 +51,9 @@ export default class Point {
 		return new Point(this);
 	}
 
-	distance(other) {
-		let dx = other.x - this.x,
+	distance() {
+		let other = Point.read(arguments),
+			dx = other.x - this.x,
 			dy = other.y - this.y;
 		
 		return Math.abs(Math.sqrt((dx * dx) + (dy * dy)));

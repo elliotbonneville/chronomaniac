@@ -23,7 +23,6 @@ export default class Tile {
 		this._noise = 0;
 
 		this.opaque = false;
-		this.lighting = [];
 		this.walkable = true;
 	}
 
@@ -38,6 +37,10 @@ export default class Tile {
 
 	get color() {
 		let baseColor = this._actor ? this._actor.color : this._color;
+
+		if (this.map.lit) {
+			return baseColor;
+		}
 
 		if (this.lighting.length) {
 			let col = new Color(baseColor, ...this.lighting.map(light => light.color));
@@ -63,6 +66,8 @@ export default class Tile {
 				return a += source.strength;
 			}, 0) / this.lighting.length;
 			return baseColor;
+		} else if (this.map.lit) {
+			return baseColor;
 		}
 	}
 
@@ -78,6 +83,21 @@ export default class Tile {
 	set actor(actor) {
 		this._actor = actor;
 		this.map.update(this);
+	}
+
+	get lighting() {
+		let pos = this.position.toString(),
+			lighting = this.map.lighting[pos];
+
+		if (!lighting) {
+			this.map.lighting[pos] = [];
+		}
+
+		return this.map.lighting[pos];
+	}
+
+	set lighting(lighting) {
+		this.map.lighting[this.position.toString()] = lighting;
 	}
 
 	get neighbors() {

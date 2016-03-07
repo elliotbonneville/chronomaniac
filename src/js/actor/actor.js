@@ -48,4 +48,14 @@ export default class Actor {
 	render() {
 		this.tile.render();
 	}
+
+	saveState() {
+		this.timeline.push(this.serialize());
+	}
+
+	serialize() {
+		return {
+			position: this.position.clone()
+		};
+	}
 }

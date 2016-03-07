@@ -14,13 +14,14 @@ export default class Map extends EventHandler {
 
 		this.options = Object.assign({
 			width: 80,
-			height: 25
+			height: 30
 		}, options);
+
+		this.lighting = {};
+		this.tiles = [];
 	}
 
 	generate() {
-		this.tiles = [];
-
 		for (let x = 0; x < this.options.width; x++) {
 			this.tiles[x] = [];
 			for (let y = 0; y < this.options.height; y++) {

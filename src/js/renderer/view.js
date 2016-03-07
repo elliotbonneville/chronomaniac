@@ -42,7 +42,7 @@ export default class View {
 		let pos = Point.read(arguments);
 
 		if (!pos || !pos.in(this.rect)) {
-			return Cell.Null;
+			return null;
 		}
 		
 		return this._cells[pos.x][pos.y];

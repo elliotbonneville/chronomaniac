@@ -7,7 +7,8 @@ import MoveAction from "~/actor/actions/move.action";
 // convenience method to move the player
 function movePlayer(game, direction) {
 	if (game.player.do(new MoveAction({direction}))) {
-		camera.move(game.display.views.map, direction.inverse());
+		game.tick();
+		// camera.move(game.display.views.map, direction.inverse());
 	}
 }
 

@@ -82,6 +82,8 @@ export class LightRenderer {
 		// update the internal reference used for calculation
 		this.light = light;
 
+		console.log(light);
+
 		// update the tile the light is on because it won't be calculated
 		this.map.tile(this.light.position).lighting = 
 			[new LightInteraction(light.color, light.radius)];
@@ -92,6 +94,14 @@ export class LightRenderer {
 		for(i = 0; i < 8; i++) {
 			this.calculateOctant(this.light.position.x, this.light.position.y, 1, 1.0, 0.0, this.light.radius, 
 				mult[0][i], mult[1][i], mult[2][i], mult[3][i], 0);
+		}
+	}
+
+	// update all light sources on the map
+	update() {
+		for (let tileCoordinates in this.map.lighting) {
+			delete this.map.lighting[tileCoordinates];
+			game.map.tile(tileCoordinates.split(",")).render();
 		}
 	}
 }
