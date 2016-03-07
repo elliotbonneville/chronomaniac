@@ -7,7 +7,6 @@ const mult = [
 	[1,  0,  0,  1, -1,  0,  0, -1]
 ];
 
-// uses shadowcasting to calculate lighting at specified position
 export class LightRenderer {
 	constructor (map) {
 		this.map = map;
@@ -48,7 +47,7 @@ export class LightRenderer {
 							
 								// add the light interaction to the tile
 								t.lighting.push(new LightInteraction(this.light.color, l));
-								t.update();
+								t.render();
 						} 
 						
 						if (blocked) {
@@ -87,7 +86,7 @@ export class LightRenderer {
 		this.map.tile(this.light.position).lighting = 
 			[new LightInteraction(light.color, light.radius)];
 
-		this.map.tile(this.light.position).update();
+		this.map.tile(this.light.position).render();
 
 		// calculate each octant
 		for(i = 0; i < 8; i++) {

@@ -55,9 +55,7 @@ export default class Tile {
 	}
 
 	get backgroundColor() {
-		let baseColor = this._actor ? 
-			this._actor.backgroundColor.clone() : 
-			this._backgroundColor.clone();
+		let baseColor = this._backgroundColor.clone();
 
 		if (this.lighting.length) {
 			baseColor.a = this.lighting.reduce((a, source) => {
@@ -101,7 +99,7 @@ export default class Tile {
 		this.map.tiles[this.position.x][this.position.y] = tile;
 	}
 
-	update() {
+	render() {
 		this.map.update(this)
 	}
 }

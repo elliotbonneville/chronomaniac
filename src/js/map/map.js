@@ -6,7 +6,7 @@ import FloorTile from "~/tiles/floor.tile";
 import generateCellularAutomata from "~/map/generators/cellularAutomata";
 import generatePerlinNoise from "~/map/generators/perlinNoise";
 
-import {LightRenderer, Light} from "~/map/light";
+import {LightRenderer} from "~/map/light";
 
 export default class Map extends EventHandler {
 	constructor(options) {
@@ -32,15 +32,16 @@ export default class Map extends EventHandler {
 		generatePerlinNoise(this);
 
 		this.light = new LightRenderer(this);
-
-		let light = new Light(this.randomTile(FloorTile), 10, new Color("orange"));
-		this.light.calculate(light);
 		this.emit("redraw");
 	}
 
-	randomTile(tileType, width = this.options.width, height = this.options.height) {
-		let p = Point.random();
-
+	randomTile(
+		tileType = FloorTile,
+		width = this.options.width,
+		height = this.options.height
+	) {
+		let p = Point.random(width, height);
+		console.log(this.tile(p));
 		while (!(this.tile(p) instanceof tileType)) {
 			p = Point.random(width, height);
 		}
