@@ -4,7 +4,7 @@ import Color from "~/renderer/color";
 export default class Cell {
 	constructor(
 			position,
-			character = ".",
+			character = "",
 			color = new Color("white"),
 			backgroundColor = new Color("black")
 		) {
