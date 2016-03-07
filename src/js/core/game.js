@@ -53,6 +53,7 @@ export default class Game {
 
 		this.player = new Player(this.map, tile);
 
+		// center camera on player
 		// this.display.views.map.origin = tile.subtract(15, 15);
 
 		// and render the new stuff
@@ -68,7 +69,7 @@ export default class Game {
 		// make any mobs move
 
 		// save game state
-		
+
 		this.input.waiting = false;
 	}
 }

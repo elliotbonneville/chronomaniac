@@ -43,6 +43,7 @@ export class LightRenderer {
 								pos2 = this.light.position,
 								d = (pos1.x - pos2.x) * (pos1.x - pos2.x) + (pos1.y - pos2.y) * (pos1.y - pos2.y),
 								t = this.map.tile(X, Y),
+								// TODO: replace this.light.radius with radiusSquared from above
 								l = Math.max(.2, 1 - (d / (this.light.radius * this.light.radius)));
 							
 								// add the light interaction to the tile
@@ -81,8 +82,6 @@ export class LightRenderer {
 		
 		// update the internal reference used for calculation
 		this.light = light;
-
-		console.log(light);
 
 		// update the tile the light is on because it won't be calculated
 		this.map.tile(this.light.position).lighting = 

@@ -8,7 +8,7 @@ export default class Actor {
 		this._character = "@";
 		this._color = new Color("white");
 
-		this.history = [];
+		this.timeline = [];
 
 		this.tile.actor = this;
 	}
@@ -39,7 +39,7 @@ export default class Actor {
 		let occurred = action.apply(this);
 
 		if (save !== false && occurred) {
-			this.history.push(action);
+			this.timeline.push(this.save());
 		}
 
 		return occurred;
@@ -49,13 +49,10 @@ export default class Actor {
 		this.tile.render();
 	}
 
-	saveState() {
-		this.timeline.push(this.serialize());
-	}
-
-	serialize() {
+	save() {
 		return {
-			position: this.position.clone()
+			position: this.position.clone(),
+			actorsVisible: []
 		};
 	}
 }

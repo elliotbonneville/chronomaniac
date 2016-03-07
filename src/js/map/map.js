@@ -7,6 +7,7 @@ import generateCellularAutomata from "~/map/generators/cellularAutomata";
 import generatePerlinNoise from "~/map/generators/perlinNoise";
 
 import {LightRenderer} from "~/map/light";
+import visibleFromPoint from "~/map/visibleFromPoint";
 
 export default class Map extends EventHandler {
 	constructor(options) {
@@ -19,6 +20,8 @@ export default class Map extends EventHandler {
 
 		this.lighting = {};
 		this.tiles = [];
+
+		this.visibleFromPoint = visibleFromPoint.bind(null, this);
 	}
 
 	generate() {
