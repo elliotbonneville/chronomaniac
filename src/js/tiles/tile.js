@@ -112,8 +112,11 @@ export default class Tile {
 	set noise(noise) {
 		this._noise = noise;
 
-		let channel = noise * 7;
-		this.backgroundColor = new Color(channel, channel, channel);
+		let bgChannel = noise * 7,
+			fgChannel = noise * 30;
+
+		this.backgroundColor = new Color(bgChannel, bgChannel, bgChannel);
+		this.color = new Color(fgChannel, fgChannel, fgChannel);
 	}
 
 	replace(tile) {
