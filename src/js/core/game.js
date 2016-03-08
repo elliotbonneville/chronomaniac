@@ -52,10 +52,14 @@ export default class Game {
 		this.map.generate();
 		this.watch.draw();
 
+		// create a new list of actors for the map
+		this.actors = [];
+
 		// make da player
 		let tile = this.map.randomTile(undefined, 15, 15);
 
-		this.currentPlayer = new Player(this.map, tile);
+		this.player = new Player(this.map, tile);
+		this.actors.push(this.player);
 
 		// center camera on player
 		// this.display.views.map.origin = tile.subtract(15, 15);
@@ -87,6 +91,11 @@ export default class Game {
 	timeTravel(temporalDistance) {
 		this.currentTick += temporalDistance;
 
+		// clone current player and set them back in time
+		this.actors.push(this.player.clone());
+		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
 
+		// add a TimeTravel action to current player's timeline
+		
 	}
 }

@@ -2,14 +2,18 @@ import Color from "~/renderer/color";
 import Timeline from "~/actor/timeline";
 
 export default class Actor {
-	constructor(map, position = map.randomTile()) {
+	constructor(
+		map,
+		position = map.randomTile(),
+		timeline = new Timeline(this)
+	) {
 		this.map = map;
 
 		this._position = position;
 		this._character = "@";
 		this._color = new Color("white");
 
-		this.timeline = new Timeline();
+		this.timeline = timeline;
 
 		this.visionRadius = 5;
 
@@ -38,13 +42,16 @@ export default class Actor {
 		return this.map.tile(this.position);
 	}
 
+	clone() {
+		return new this.constructor(this.position, this.timeline.clone());
+	}
+
 	do(action, save) {
+		console.log(action);
 		let result = action.apply(this);
 
 		if (save !== false && result.occurred && !this.timeline.inPast) {
 			this.timeline.advance(this.save(action));
-		} else {
-			this.timeline.tick();
 		}
 
 		return result;

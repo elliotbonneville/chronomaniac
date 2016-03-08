@@ -34,6 +34,10 @@ export default class Point {
 		return new Point(Math.floor(Math.random() * x), Math.floor(Math.random() * y));
 	}
 
+	get inverse() {
+		return new Point(this.x * -1, this.y * -1);
+	}
+
 	get x() {
 		return this._x;
 	}
@@ -77,10 +81,6 @@ export default class Point {
 			this.x < rect.bottomRight.x &&
 			this.y >= rect.topLeft.y &&
 			this.y < rect.bottomRight.y;
-	}
-
-	inverse() {
-		return new Point(this.x * -1, this.y * -1);
 	}
 
 	manhattan(other) {

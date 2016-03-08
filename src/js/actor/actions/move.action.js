@@ -4,6 +4,7 @@ import Point from "~/utils/point";
 export default class MoveAction extends Action {
 	constructor(data) {
 		super(data);
+
 	}
 
 	_apply(actor) {
@@ -14,5 +15,11 @@ export default class MoveAction extends Action {
 			actor.position = newPos;
 			return true;
 		}
+	}
+
+	get inverse() {
+		return new MoveAction({
+			direction: this.data.direction.inverse
+		});
 	}
 }

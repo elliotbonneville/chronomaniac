@@ -1,3 +1,5 @@
+import {noop} from "lodash";
+
 export default class Action {
 	constructor(data) {
 		this.data = data;
@@ -5,9 +7,10 @@ export default class Action {
 
 	apply(actor) {
 		return {
-			occurred: this._apply(actor),
+			inverse: this._inverse || noop,
+			occurred: this._apply ? this._apply(actor) : false,
 			tick: game.tick
-		}
+		};
 	}
 
 	clone() {
