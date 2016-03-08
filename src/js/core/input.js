@@ -6,7 +6,7 @@ import MoveAction from "~/actor/actions/move.action";
 
 // convenience method to move the player
 function movePlayer(game, direction) {
-	return game.player.do(new MoveAction({direction}));
+	return game.currentPlayer.do(new MoveAction({direction}));
 }
 
 let input = {

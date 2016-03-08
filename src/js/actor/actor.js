@@ -1,4 +1,5 @@
 import Color from "~/renderer/color";
+import Timeline from "~/actor/timeline";
 
 export default class Actor {
 	constructor(map, position = map.randomTile()) {
@@ -8,7 +9,9 @@ export default class Actor {
 		this._character = "@";
 		this._color = new Color("white");
 
-		this.timeline = [];
+		this.timeline = new Timeline();
+
+		this.visionRadius = 5;
 
 		this.tile.actor = this;
 	}
@@ -36,23 +39,41 @@ export default class Actor {
 	}
 
 	do(action, save) {
-		let occurred = action.apply(this);
+		let result = action.apply(this);
 
-		if (save !== false && occurred) {
-			this.timeline.push(this.save());
+		if (save !== false && result.occurred && !this.timeline.inPast) {
+			this.timeline.advance(this.save(action));
+		} else {
+			this.timeline.tick();
 		}
 
-		return occurred;
+		return result;
+	}
+
+	visible(filter = () => true) {
+		let tiles = [];
+
+		this.map.visibleFromPoint(this.position, this.visionRadius, p => {
+			let tile = this.map.tile(p);
+
+			if (filter(tile)) {
+				tiles.push(tile);
+			}
+		});
+
+		return tiles;
 	}
 
 	render() {
 		this.tile.render();
 	}
 
-	save() {
+	// returns a new event representing the action
+	save(action) {
 		return {
-			position: this.position.clone(),
-			actorsVisible: []
+			action,
+			actorsVisible: this.visible(t => t.actor !== null && t.actor !== this),
+			position: this.position.clone()
 		};
 	}
 }

@@ -6,7 +6,7 @@ export default class MoveAction extends Action {
 		super(data);
 	}
 
-	apply(actor) {
+	_apply(actor) {
 		let newPos = actor.position.add(this.data.direction),
 			tile = actor.map.tile(newPos);
 

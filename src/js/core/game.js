@@ -7,7 +7,7 @@ import Rect from "~/utils/rect";
 import Point from "~/utils/point";
 
 import {Light} from "~/map/light";
-import Player from "~/actor/player";
+import Player from "~/actor/player.actor";
 
 import WatchUI from "~/ui/watch.ui";
 
@@ -24,8 +24,12 @@ export default class Game {
 		this.display = new Display(this.settings);
 		this.begin();
 
-		// and finally bind keyboard handlers
+		// bind keyboard handlers
 		this.input = input.init(this);
+
+		// initialize tick count
+		this.currentTick = 0;
+		this.timeFrontier = 0;
 	}
 
 	begin() {
@@ -51,7 +55,7 @@ export default class Game {
 		// make da player
 		let tile = this.map.randomTile(undefined, 15, 15);
 
-		this.player = new Player(this.map, tile);
+		this.currentPlayer = new Player(this.map, tile);
 
 		// center camera on player
 		// this.display.views.map.origin = tile.subtract(15, 15);
@@ -61,6 +65,12 @@ export default class Game {
 	}
 
 	tick() {
+		if (this.currentTick == this.timeFrontier) {
+			this.timeFrontier++;
+		}
+
+		this.currentTick++;
+
 		// calculates light from lights on the map
 		game.map.light.update();
 
@@ -71,5 +81,12 @@ export default class Game {
 		// save game state
 
 		this.input.waiting = false;
+	}
+
+	// do what's necessary to make time travel happen
+	timeTravel(temporalDistance) {
+		this.currentTick += temporalDistance;
+
+
 	}
 }
