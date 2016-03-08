@@ -42,8 +42,20 @@ export default class Actor {
 		return this.map.tile(this.position);
 	}
 
-	clone() {
-		return new this.constructor(this.position, this.timeline.clone());
+	clone(temporalDistance = 0) {
+		if (temporalDistance + game.currentTick === this.timeline.currentTick) {
+			throw new Error("Cannot clone actor to same position and time!");
+		}
+
+		let clone = new this.constructor(this.map, this.position.clone(), null);
+		clone.timeline = this.timeline.clone();
+		clone.timeline.actor = clone;
+
+		clone.timeline.travel(temporalDistance);
+
+		this.tile.actor = this;
+		
+		return clone;
 	}
 
 	do(action, save) {
@@ -54,6 +66,12 @@ export default class Actor {
 		}
 
 		return event;
+	}
+
+	// remove this actor from the game completely
+	remove() {
+		game.actors.splice(game.actors.indexOf(this), 1);
+		this.tile.actor = null;
 	}
 
 	visible(filter = () => true) {

@@ -5,12 +5,16 @@ export default class Timeline {
 		this.events = events;
 	}
 
+	get currentEvent() {
+		return this.events[this.currentTick];
+	}
+
 	get inPast() {
-		return this.currentTick < this.timeFrontier;
+		return this.currentTick < this.events.length;
 	}
 
 	get inFuture() {
-		return this.currentTick > this.timeFrontier;
+		return this.currentTick > this.events.length;
 	}
 
 	get inPresent() {
@@ -23,8 +27,12 @@ export default class Timeline {
 		this.tick();
 	}
 
-	clone() {
-		return new Timeline(this.actor, this.events.map((event) => {
+	clearFuture() {
+		this.events.length = this.currentTick + 1;
+	}
+
+	clone(target) {
+		return new Timeline(null, this.events.map((event) => {
 			return {
 				action: event.action.clone(),
 				actorsVisible: [...event.actorsVisible],

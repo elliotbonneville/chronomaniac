@@ -59,7 +59,7 @@ export default class Game {
 		let tile = this.map.randomTile(undefined, 15, 15);
 
 		this.player = new Player(this.map, tile);
-		this.actors.push(this.player);
+		// this.actors.push(this.player);
 
 		// center camera on player
 		// this.display.views.map.origin = tile.subtract(15, 15);
@@ -81,6 +81,7 @@ export default class Game {
 		// update lava flows
 
 		// make any mobs move
+		this.actors.forEach(actor => actor.takeTurn());
 
 		// save game state
 
@@ -91,11 +92,11 @@ export default class Game {
 	timeTravel(temporalDistance) {
 		this.currentTick += temporalDistance;
 
-		// clone current player and set them back in time
-		this.actors.push(this.player.clone());
+		// clone current player and don't add them to the list of actors
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
+		this.actors.push(this.player.clone(temporalDistance));
 
 		// add a TimeTravel action to current player's timeline
-		
+
 	}
 }
