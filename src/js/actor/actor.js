@@ -47,14 +47,13 @@ export default class Actor {
 	}
 
 	do(action, save) {
-		console.log(action);
-		let result = action.apply(this);
+		let event = action.apply(this);
 
-		if (save !== false && result.occurred && !this.timeline.inPast) {
+		if (save !== false && event.occurred && this.timeline.inPresent) {
 			this.timeline.advance(this.save(action));
 		}
 
-		return result;
+		return event;
 	}
 
 	visible(filter = () => true) {

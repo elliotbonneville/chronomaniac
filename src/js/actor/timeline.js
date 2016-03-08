@@ -43,14 +43,11 @@ export default class Timeline {
 		}
 
 		if (temporalDistance > 0) {
-			console.log(this.events, this.currentTick);
 			if (this.currentTick + temporalDistance > this.events.length) {
-				console.log("Tried to travel too far into the future.");
 				return;
 			}
 
 			while (temporalDistance--) {
-				console.log(this.events[this.currentTick]);
 				this.actor.do(this.events[this.currentTick].action, false);
 				this.currentTick++;
 			}
@@ -61,9 +58,7 @@ export default class Timeline {
 
 			while (temporalDistance++) {
 				this.currentTick--;
-				console.log(this.currentTick, this.events[this.currentTick].position);
 				this.actor.do(this.events[this.currentTick].action.inverse, false);
-				console.log(this.currentTick);
 			}
 		}
 	}
