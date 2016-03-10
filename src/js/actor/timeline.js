@@ -1,20 +1,20 @@
 export default class Timeline {
-	constructor(actor, events = []) {
-		this.currentTick = events.length;
+	constructor(actor, events = [], tick = 0) {
+		this.tick = tick;
 		this.actor = actor;
 		this.events = events;
 	}
 
 	get currentEvent() {
-		return this.events[this.currentTick];
+		return this.events[this.tick];
 	}
 
 	get inPast() {
-		return this.currentTick < this.events.length - 1;
+		return this.tick < this.events.length - 1;
 	}
 
 	get inFuture() {
-		return this.currentTick > this.events.length;
+		return this.tick > this.events.length;
 	}
 
 	get inPresent() {
@@ -23,61 +23,46 @@ export default class Timeline {
 
 	// timeline can only advance when an event which takes one tick is added
 	advance(event) {
-		this.events.push(event);
-		this.tick();
+		this.events[this.tick] = event;
+		this.tick++;
 	}
 
-	clearFuture() {
-		this.events.length = this.currentTick + 1;
-	}
-
-	clone(target) {
+	clone() {
 		return new Timeline(null, this.events.map((event) => {
 			return {
-				action: event.action.clone(),
-				actorsVisible: [...event.actorsVisible],
-				position: event.position.clone()
+				before: {
+					actorsVisible: [...event.before.actorsVisible],
+					position: event.before.position.clone()
+				},
+				after: {
+					actorsVisible: [...event.after.actorsVisible],
+					position: event.after.position.clone()
+				}
 			};
-		}));
+		}, this.tick));
 	}
 
-	tick() {
-		this.currentTick++;
+	replayUntil(targetTick) {
+		this.tick = targetTick;
+
+		if (this.currentEvent) {
+			this.actor.position = this.currentEvent.after.position;
+		} else {
+			this.actor.remove();
+		}
 	}
 
 	travel(temporalDistance) {
-		if (temporalDistance === 0) {
-			return;
+		this.tick += temporalDistance;
+
+		if (this.currentEvent) {
+			this.actor.position = this.currentEvent.after.position;
+		} else {
+			this.actor.remove();
 		}
+	}
 
-		// if we're travelling forward along this actor's timeline
-		if (temporalDistance > 0) {
-			if (this.currentTick + temporalDistance > this.events.length) {
-				return;
-			}
-
-			while (temporalDistance--) {
-				if (!this.events[this.currentTick]) {
-					continue;
-				}
-
-				this.actor.do(this.events[this.currentTick].action, false);
-				this.currentTick++;
-			}
-		} else { // if we're traveling backward along this actor's timeline
-			if (this.currentTick === 0) {
-				return;
-			}
-
-			while (temporalDistance++) {
-				this.currentTick--;
-
-				if (!this.events[this.currentTick]) {
-					continue;
-				}
-
-				this.actor.do(this.events[this.currentTick].action.inverse, false);
-			}
-		}
+	clearFuture() {
+		this.events.length = this.tick + 1;
 	}
 }

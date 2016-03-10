@@ -11,28 +11,26 @@ export default class Player extends Actor {
 	takeTurn() {
 		if (this.timeline.inPast) {
 			this.timeline.travel(1);
-		} else if (this.timeline.inPresent) {
+		} else {
 			this.remove();
-		} else if (this.timeline.inFuture) {
 			return;
 		}
 
 		if (!this.timeline.currentEvent) {
-			this.remove();
 			return;
 		}
 
 		// check for paradoxes
 		if (this.visible(t => t.actor !== null && t.actor !== this).length !== 
-			this.timeline.currentEvent.actorsVisible.length) {
+			this.timeline.currentEvent.after.actorsVisible.length) {
 
-			this.map.tile(game.player.position).actor = null;
+			game.player.remove();
 			
 			game.player = this;
 			game.player.color = new Color("white");
 			game.actors.splice(game.actors.indexOf(this), 1);
 
-			let i = game.actors.length - 1;
+			// let i = game.actors.length - 1;
 
 			// while (i--) {
 			// 	if (game.actors[i].spawnTime > this.spawnTime) {

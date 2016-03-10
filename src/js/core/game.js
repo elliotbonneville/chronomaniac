@@ -8,6 +8,7 @@ import Point from "~/utils/point";
 
 import {Light} from "~/map/light";
 import Player from "~/actor/player.actor";
+import TimeTravelAction from "~/actor/actions/timeTravel.action";
 
 import LogUI from "~/ui/log.ui";
 import InfoPanelUI from "~/ui/infoPanel.ui";
@@ -31,7 +32,6 @@ export default class Game {
 
 		// initialize tick count
 		this.currentTick = 0;
-		this.timeFrontier = 0;
 	}
 
 	begin() {
@@ -74,16 +74,14 @@ export default class Game {
 		this.map.generate();
 		this.log.draw();
 		this.infoPanel.draw();
-		// this.watch.draw();
 
 		// create a new list of actors for the map
 		this.actors = [];
 
-		// make da player
+		// create the player on a random tile
 		let tile = this.map.randomTile(undefined, undefined, 15, 15);
 
 		this.player = new Player(this.map, tile);
-		// this.actors.push(this.player);
 
 		// and render the new stuff
 		this.display.render();
@@ -94,56 +92,58 @@ export default class Game {
 	}
 
 	tick() {
-		if (this.currentTick == this.timeFrontier) {
-			this.timeFrontier++;
-		}
-
 		this.currentTick++;
-
-		// update the map!
 		this.map.tick(this.currentTick + this.startTime);
-
-		// calculates light from lights on the map
 		this.map.light.update();
-
-		// update lava flows
-
-		// make any mobs move
 		this.actors.forEach(actor => actor.takeTurn());
-
-		// save game state
 
 		this.input.waiting = false;
 	}
 
 	// do what's necessary to make time travel happen
 	timeTravel(temporalDistance) {
-		if (this.currentTick + temporalDistance < 0 || Math.abs(temporalDistance) > 30) {
+		if (this.currentTick + temporalDistance < 0 || Math.abs(temporalDistance) > 50) {
 			game.log.message("Your watch won't go that far.");
 			return;
 		}
 
+		// store the current tick so we can compare whatever the future tick ends up
+		// being against it in order to determine if we've traveled into the past or into
+		// the future
+		let lastTick = this.currentTick;
+
+		// set the current tick of the entire game to the tick defined by the last tick
+		// plus the distance traveled, whether that be forward or backward
 		this.currentTick += temporalDistance;
 
-		// generate all lava from beginning
+		// generate all lava from beginning of time up until this tick
 		this.map.generateLava(this.startTime, this.currentTick + this.startTime);
-
 		
-		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
-
-		// clone current player and don't add them to the list of actors
-		if (this.currentTick < this.timeFrontier) {
-			let clone = this.player.clone(temporalDistance);
+		// if the current tick is now less than the last tick, the player has traveled 
+		// back in time
+		if (this.currentTick < lastTick) {
+			// ...so we need to clone them in order to keep all their actions in the 
+			// timeline, and by leaving the player alone allow them to create a new
+			// span of time in which to act
+			let clone = this.player.clone();
 			clone.color = new Color("lightgrey");
-			clone.spawnTime = this.currentTick;
 			this.actors.push(clone);
 		}
 
-		game.log.message(`You travel ${temporalDistance > 0 ? "forward" : "back"} ` + 
-			`in time ${Math.abs(temporalDistance)} turns.`);
+		// play all actors from beginning of time up until this tick
+		this.actors.forEach(actor => actor.timeline.replayUntil(this.currentTick));
+		this.player.tile.actor = this.player;
 
-		// add a TimeTravel action to current player's timeline
+		// set the current tick of the actor to match the tick of the rest of the game,
+		// but don't replay any events, as we want to overwrite them all, of course
+		
 
+		// add a TimeTravel action to current player's timeline (which is really a null
+		// action, as clones won't actually time travel, they'll just be removed)
+		this.player.do(new TimeTravelAction({
+			destination: this.currentTick,
+			distance: temporalDistance
+		}));
 	}
 
 	win() {

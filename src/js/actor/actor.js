@@ -58,10 +58,9 @@ export default class Actor {
 		}
 
 		let clone = new this.constructor(this.map, this.position.clone(), null);
+
 		clone.timeline = this.timeline.clone();
 		clone.timeline.actor = clone;
-
-		clone.timeline.travel(temporalDistance);
 
 		this.tile.actor = this;
 		
@@ -82,10 +81,14 @@ export default class Actor {
 			return;
 		}
 
-		let event = action.apply(this);
+		let pastState = this.save(),
+			event = action.apply(this);
 
-		if (save !== false && event.occurred && this.timeline.inPresent) {
-			this.timeline.advance(this.save(action));
+		if (save !== false && event.occurred) {
+			this.timeline.advance({
+				before: pastState,
+				after: this.save()
+			});
 		}
 
 		return event;
@@ -93,7 +96,9 @@ export default class Actor {
 
 	// remove this actor from the world (i.e. they time traveled)
 	remove() {
-		this.tile.actor = null;
+		if (this.tile.actor === this) {
+			this.tile.actor = null;
+		}
 	}
 
 	// break in case of emergency paradox
@@ -121,9 +126,8 @@ export default class Actor {
 	}
 
 	// returns a new event representing the action the actor just took
-	save(action) {
+	save() {
 		return {
-			action,
 			actorsVisible: this.visible(t => t.actor !== null && t.actor !== this),
 			position: this.position.clone()
 		};
