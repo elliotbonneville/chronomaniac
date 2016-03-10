@@ -14,6 +14,8 @@ export default class MoveAction extends Action {
 		if (tile.walkable && tile.lava === 0) {
 			actor.position = newPos;
 			return true;
+		} else if (actor === game.player) {
+			game.log.message("You decide against walking into the wall.");
 		}
 	}
 

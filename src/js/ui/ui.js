@@ -55,8 +55,6 @@ export default class UI extends EventEmitter {
 	}
 
 	drawBox(rect) {
-		console.log(rect);
-		
 		// draw top edge
 		for (let x = rect.topLeft.x; x < rect.bottomRight.x; x++) {
 			this.tile(x, 0).character = "-";

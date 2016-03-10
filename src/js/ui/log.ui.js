@@ -13,13 +13,15 @@ export default class LogUI extends UI {
 		this.drawBox(new Rect(0, 0, this.settings.width - 1, this.settings.height - 1));
 	}
 
-	message(message) {
-		this.messages.unshift(message);
+	message() {
+		let messages = [...arguments];
+		messages.reverse();
+		this.messages = messages.concat(this.messages);
 
-		this.clear(new Rect(1, 1, this.settings.width - 2, this.settings.height - 2));
+		this.clear(new Rect(1, 1, this.settings.width - 1, this.settings.height - 1));
 		this.messages.every((message, i) => {
-			if (message.length > 40) {
-				message = message.substr(0, 45) + "...";
+			if (message.length > this.settings.width - 2) {
+				message = message.substr(0, this.settings.width - 5) + "...";
 			}
 
 			this.drawLabel(new Point(1, 8 - i), message);

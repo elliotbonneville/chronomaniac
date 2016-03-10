@@ -34,13 +34,17 @@ export default class Player extends Actor {
 
 			let i = game.actors.length - 1;
 
-			while (i--) {
-				if (game.actors[i].spawnTime > this.spawnTime) {
-					game.actors[i].erase();
-				}
-			}
+			// while (i--) {
+			// 	if (game.actors[i].spawnTime > this.spawnTime) {
+			// 		game.actors[i].erase();
+			// 	}
+			// }
 
 			this.timeline.clearFuture();
+			game.log.message(
+				"You spot an older, worn version of yourself",
+				"  looking at you in horror. Immediately, you",
+				"  begin to fade...");
 		}
 	}
 }

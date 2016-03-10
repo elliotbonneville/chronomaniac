@@ -3,6 +3,7 @@ import Point from "~/utils/point";
 
 import * as camera from "~/tools/camera";
 import MoveAction from "~/actor/actions/move.action";
+import ThrowLeverAction from "~/actor/actions/throwLever.action";
 
 // convenience method to move the player
 function movePlayer(game, direction) {
@@ -14,7 +15,8 @@ let input = {
 		"up": game => {return movePlayer(game, new Point(0, -1))},
 		"down": game => {return movePlayer(game, new Point(0, 1))},
 		"left": game => {return movePlayer(game, new Point(-1, 0))},
-		"right": game => {return movePlayer(game, new Point(1, 0))}
+		"right": game => {return movePlayer(game, new Point(1, 0))},
+		"space": game => {return game.player.do(new ThrowLeverAction())}
 	},
 
 	init: function (game) {

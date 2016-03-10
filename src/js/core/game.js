@@ -85,9 +85,6 @@ export default class Game {
 		this.player = new Player(this.map, tile);
 		// this.actors.push(this.player);
 
-		// center camera on player
-		// this.display.views.map.origin = tile.subtract(15, 15);
-
 		// and render the new stuff
 		this.display.render();
 	}
@@ -141,6 +138,9 @@ export default class Game {
 			clone.spawnTime = this.currentTick;
 			this.actors.push(clone);
 		}
+
+		game.log.message(`You travel ${temporalDistance > 0 ? "forward" : "back"} ` + 
+			`in time ${Math.abs(temporalDistance)} turns.`);
 
 		// add a TimeTravel action to current player's timeline
 

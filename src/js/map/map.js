@@ -49,7 +49,7 @@ export default class Map extends EventHandler {
 			}
 		}
 
-		// generateCellularAutomata(this, mt);
+		generateCellularAutomata(this, mt);
 		generatePerlinNoise(this, mt);
 
 		this.light = new LightRenderer(this);
