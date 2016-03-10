@@ -192,6 +192,7 @@ export default class Tile {
 			}
 		});
 
+		this.render();
 		// this.map.light.calculate(this.lightSource);
 	}
 }

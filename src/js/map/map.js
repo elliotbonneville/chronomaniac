@@ -13,7 +13,7 @@ import Random from "random-js";
 
 let mt = Random.engines.mt19937();
 export default class Map extends EventHandler {
-	constructor(options) {
+	constructor(options, seed) {
 		super();
 
 		this.options = Object.assign({
@@ -27,7 +27,7 @@ export default class Map extends EventHandler {
 
 		this.visibleFromPoint = visibleFromPoint.bind(null, this);
 
-		mt.seed(1);
+		mt.seed(seed);
 	}
 
 	createLavaFlow() {
@@ -64,17 +64,18 @@ export default class Map extends EventHandler {
 	}
 
 	// generate lava from 0 to tick x
-	generateLava(finalTick) {
+	generateLava(startTime, finalTick) {
 		// remove all lava from the scene and recalculate it from start
 		let i = this.lavaTiles.length;
 		while (i--) {
 			let tile = this.lavaTiles[i];
 
 			tile.lava = 0;
+			tile.lavaSource = false;
 			tile.render();
 		}
 
-		for (let i = 0; i <= finalTick; i++) {
+		for (let i = startTime; i <= finalTick; i++) {
 			this.tick(i);
 		}
 	}

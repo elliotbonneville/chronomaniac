@@ -33,11 +33,13 @@ export default class Game {
 	}
 
 	begin() {
+		this.startTime = Date.now();
+
 		// clear the display if there was anything on it before
 		this.display.clear();
 
 		// create a new map
-		this.map = new TileMap(this.settings);
+		this.map = new TileMap(this.settings, this.startTime);
 		this.watch = new WatchUI({
 			width: 11,
 			height: 13
@@ -80,7 +82,7 @@ export default class Game {
 		this.currentTick++;
 
 		// update the map!
-		this.map.tick(this.currentTick);
+		this.map.tick(this.currentTick + this.startTime);
 
 		// calculates light from lights on the map
 		this.map.light.update();
@@ -100,7 +102,7 @@ export default class Game {
 		this.currentTick += temporalDistance;
 
 		// generate all lava from beginning
-		this.map.generateLava(this.currentTick);
+		this.map.generateLava(this.startTime, this.currentTick + this.startTime);
 
 		// clone current player and don't add them to the list of actors
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
