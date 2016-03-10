@@ -12,6 +12,9 @@ export default class ThrowLeverAction extends Action {
 	_apply(actor) {
 		if (actor.tile instanceof LeverTile) {
 			actor.tile.throwLever();
+			return true;
+		} else {
+			game.log.message("There's no lever here to throw.");
 		}
 	}
 
