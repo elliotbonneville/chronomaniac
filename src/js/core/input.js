@@ -61,6 +61,10 @@ let input = {
 				} else {
 					input.acceptTravelInput(temporalDistance);
 				}
+			},
+			escape: () => {
+				game.log.message(`You resist the urge to turn your watch ${input.state.direction}.`);
+				input.rejectTravelInput();
 			}
 		}
 	},
@@ -76,7 +80,7 @@ let input = {
 	},
 
 	initiateTravelInput() {
-		game.log.message(`Travel how many turns ${this.state.direction}? `);
+		game.log.message(`You decide to travel ${this.state.direction}. How far?`);
 		this.setContext("type");
 	},
 
@@ -87,7 +91,7 @@ let input = {
 	},
 
 	updateTravelInput() {
-		game.log.replaceMessage(`Travel how many turns ${this.state.direction}? ${this.state.value}`);
+		game.log.replaceMessage(`You decide to travel ${this.state.direction}. How far? ${this.state.value}`);
 	},
 
 	acceptTravelInput(temporalDistance) {
