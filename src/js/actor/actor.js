@@ -34,6 +34,11 @@ export default class Actor {
 		return this._character;
 	}
 
+	set character(character) {
+		this._character = character;
+		this.map.tile(this.position).render();
+	}
+
 	get color() {
 		return this._color;
 	}
@@ -58,7 +63,20 @@ export default class Actor {
 		return clone;
 	}
 
+	die() {
+		this.character = "%";
+		this.dead = true;
+
+		if (this.type === "player") {
+			game.lose();
+		}
+	}
+
 	do(action, save) {
+		if (this.dead) {
+			return;
+		}
+
 		let event = action.apply(this);
 
 		if (save !== false && event.occurred && this.timeline.inPresent) {

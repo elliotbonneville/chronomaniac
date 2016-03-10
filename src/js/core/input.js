@@ -18,11 +18,11 @@ let input = {
 	},
 
 	init: function (game) {
-		for (let event in this.events) {
-			Mousetrap.bind(event, () => {
-				let eventOccurred = this.events[event](game);
+		for (let eventTrigger in this.events) {
+			Mousetrap.bind(eventTrigger, () => {
+				let event = this.events[eventTrigger](game);
 
-				if (!this.waiting && eventOccurred) {
+				if (!this.waiting && event.occurred) {
 					this.waiting = true;
 					game.tick();
 				}

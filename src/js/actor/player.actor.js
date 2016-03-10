@@ -3,6 +3,8 @@ import Actor from "~/actor/actor";
 export default class Player extends Actor {
 	constructor(map, position, timeline) {
 		super(map, position, timeline);
+
+		this.type = "player";
 	}
 
 	takeTurn() {

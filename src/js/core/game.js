@@ -47,10 +47,10 @@ export default class Game {
 		this.map.lit = true;
 
 		// create a new view for the map
-		this.display.addView("map", new View(new Rect(0, 0, 30, 30), this.map));
-		this.display.addView("watch", new View(new Rect(31, 0, 42, 13), this.watch));
+		this.display.addView("map", new View(new Rect(0, 0, 50, 30), this.map));
+		// this.display.addView("watch", new View(new Rect(31, 0, 42, 13), this.watch));
 		this.map.generate();
-		this.watch.draw();
+		// this.watch.draw();
 
 		// create a new list of actors for the map
 		this.actors = [];
@@ -66,6 +66,10 @@ export default class Game {
 
 		// and render the new stuff
 		this.display.render();
+	}
+
+	lose() {
+		console.log("Your character died. You lost the game.");
 	}
 
 	tick() {
@@ -100,9 +104,16 @@ export default class Game {
 
 		// clone current player and don't add them to the list of actors
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
-		this.actors.push(this.player.clone(temporalDistance));
+
+		if (this.currentTick < this.timeFrontier) {
+			this.actors.push(this.player.clone(temporalDistance));
+		}
 
 		// add a TimeTravel action to current player's timeline
 
+	}
+
+	win() {
+		console.log("You win the game!");
 	}
 }

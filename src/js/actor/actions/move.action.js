@@ -11,7 +11,7 @@ export default class MoveAction extends Action {
 		let newPos = actor.position.add(this.data.direction),
 			tile = actor.map.tile(newPos);
 
-		if (tile.walkable) {
+		if (tile.walkable && tile.lava === 0) {
 			actor.position = newPos;
 			return true;
 		}

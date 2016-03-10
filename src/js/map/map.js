@@ -33,6 +33,10 @@ export default class Map extends EventHandler {
 	createLavaFlow() {
 		let tile = this.tile(this.randomTile(undefined, FloorTile, 30, 30));
 
+		while (Random.real(0, 1)(mt) < .97 && tile.elevation > 5) {
+			tile = this.tile(this.randomTile(undefined, FloorTile, 30, 30));
+		}
+
 		tile.lavaSource = true;
 		tile.lava = 1;		
 	}
@@ -93,7 +97,7 @@ export default class Map extends EventHandler {
 	tick(currentTick) {
 		mt.seed(currentTick);
 
-		if (Random.bool(0.5)(mt)) {
+		if (Random.bool(0.03)(mt)) {
 			this.createLavaFlow();
 		}
 

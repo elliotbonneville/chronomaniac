@@ -33,8 +33,10 @@ export default class Tile {
 	get character() {
 		let baseChar = this._character;
 
-		if (this.lava) {
-			baseChar = "÷";
+		if (this.lavaSource) {
+			baseChar = "*";
+		} else if (this.lava) {
+			baseChar = "÷"
 		}
 
 		return this._actor ? this._actor.character : baseChar;
@@ -112,6 +114,11 @@ export default class Tile {
 				this.map.lavaTiles.push(this);
 			}
 
+			// kill any actors if they step on this tile
+			if (this.actor) {
+				this.actor.die();
+			}
+
 			// this.lightSource = new Light(this.position.clone(), 2, new Color("orange"));
 		} else {
 			let i = this.map.lavaTiles.indexOf(this);
@@ -179,9 +186,7 @@ export default class Tile {
 				return;
 			}
 
-			if (this.elevation + this.lava * 0.04 / 2 > 
-				tile.elevation + tile.lava * .04 / 2) {
-
+			if (this.elevation + this.lava > tile.elevation + tile.lava) {
 				tile.lava++;
 				this.lava--;
 			}
