@@ -10,6 +10,7 @@ import {Light} from "~/map/light";
 import Player from "~/actor/player.actor";
 
 import LogUI from "~/ui/log.ui";
+import InfoPanelUI from "~/ui/infoPanel.ui";
 import UI from "~/ui/ui";
 
 import input from "~/core/input";
@@ -51,23 +52,28 @@ export default class Game {
 		});
 
 		this.outerBox = new UI({
-			width: 50,
+			width: 35,
 			height: 25
 		});
 
-		
+		this.infoPanel = new InfoPanelUI({
+			width: 15,
+			height: 25
+		});
 
 		// dev
 		this.map.lit = true;
 
 		// create a new view for the map
-		this.display.addView("mapBox", new View(new Rect(0, 0, 50, 25), this.outerBox));
-		this.display.addView("map", new View(new Rect(1, 1, 49, 24), this.map));
+		this.display.addView("mapBox", new View(new Rect(0, 0, 35, 25), this.outerBox));
+		this.display.addView("map", new View(new Rect(1, 1, 34, 24), this.map));
 		this.display.addView("log", new View(new Rect(0, 25, 50, 35), this.log));
+		this.display.addView("infoPanel", new View(new Rect(35, 0, 50, 25), this.infoPanel));
 
-		this.outerBox.drawBox(new Rect(0, 0, 49, 24));
+		this.outerBox.drawBox(new Rect(0, 0, 34, 24));
 		this.map.generate();
 		this.log.draw();
+		this.infoPanel.draw();
 		// this.watch.draw();
 
 		// create a new list of actors for the map
