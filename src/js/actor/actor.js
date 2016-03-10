@@ -91,10 +91,15 @@ export default class Actor {
 		return event;
 	}
 
-	// remove this actor from the game completely
+	// remove this actor from the world (i.e. they time traveled)
 	remove() {
-		game.actors.splice(game.actors.indexOf(this), 1);
 		this.tile.actor = null;
+	}
+
+	// break in case of emergency paradox
+	erase() {
+		this.tile.actor = null;
+		game.actors.splice(game.actors.indexOf(this), 1);
 	}
 
 	visible(filter = () => true) {

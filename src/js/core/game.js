@@ -9,7 +9,8 @@ import Point from "~/utils/point";
 import {Light} from "~/map/light";
 import Player from "~/actor/player.actor";
 
-import WatchUI from "~/ui/watch.ui";
+import LogUI from "~/ui/log.ui";
+import UI from "~/ui/ui";
 
 import input from "~/core/input";
 
@@ -17,7 +18,7 @@ export default class Game {
 	constructor() {
 		this.settings = Object.freeze({
 			width: 80,
-			height: 30
+			height: 36
 		});
 
 		// create a new display as well, the first time the page is loaded
@@ -44,14 +45,29 @@ export default class Game {
 		// 	width: 11,
 		// 	height: 13
 		// });
+		this.log = new LogUI({
+			width: 50,
+			height: 10
+		});
+
+		this.outerBox = new UI({
+			width: 50,
+			height: 25
+		});
+
+		
 
 		// dev
 		this.map.lit = true;
 
 		// create a new view for the map
-		this.display.addView("map", new View(new Rect(0, 0, 50, 30), this.map));
-		// this.display.addView("watch", new View(new Rect(31, 0, 42, 13), this.watch));
+		this.display.addView("mapBox", new View(new Rect(0, 0, 50, 25), this.outerBox));
+		this.display.addView("map", new View(new Rect(1, 1, 49, 24), this.map));
+		this.display.addView("log", new View(new Rect(0, 25, 50, 35), this.log));
+
+		this.outerBox.drawBox(new Rect(0, 0, 49, 24));
 		this.map.generate();
+		this.log.draw();
 		// this.watch.draw();
 
 		// create a new list of actors for the map
@@ -99,17 +115,24 @@ export default class Game {
 
 	// do what's necessary to make time travel happen
 	timeTravel(temporalDistance) {
+		if (this.currentTick + temporalDistance < 0) {
+			console.log("Can't travel back that far!");
+			return;
+		}
+
 		this.currentTick += temporalDistance;
 
 		// generate all lava from beginning
 		this.map.generateLava(this.startTime, this.currentTick + this.startTime);
 
-		// clone current player and don't add them to the list of actors
+		
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
 
+		// clone current player and don't add them to the list of actors
 		if (this.currentTick < this.timeFrontier) {
 			let clone = this.player.clone(temporalDistance);
 			clone.color = new Color("lightgrey");
+			clone.spawnTime = this.currentTick;
 			this.actors.push(clone);
 		}
 

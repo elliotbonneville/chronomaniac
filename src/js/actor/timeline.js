@@ -50,22 +50,32 @@ export default class Timeline {
 			return;
 		}
 
+		// if we're travelling forward along this actor's timeline
 		if (temporalDistance > 0) {
 			if (this.currentTick + temporalDistance > this.events.length) {
 				return;
 			}
 
 			while (temporalDistance--) {
+				if (!this.events[this.currentTick]) {
+					continue;
+				}
+
 				this.actor.do(this.events[this.currentTick].action, false);
 				this.currentTick++;
 			}
-		} else {
+		} else { // if we're traveling backward along this actor's timeline
 			if (this.currentTick === 0) {
 				return;
 			}
 
 			while (temporalDistance++) {
 				this.currentTick--;
+
+				if (!this.events[this.currentTick]) {
+					continue;
+				}
+
 				this.actor.do(this.events[this.currentTick].action.inverse, false);
 			}
 		}
