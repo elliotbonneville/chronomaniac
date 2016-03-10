@@ -36,11 +36,16 @@ export default class Actor {
 
 	set character(character) {
 		this._character = character;
-		this.map.tile(this.position).render();
+		this.tile.render();
 	}
 
 	get color() {
 		return this._color;
+	}
+
+	set color(color) {
+		this._color = color;
+		this.tile.render();
 	}
 
 	get tile() {

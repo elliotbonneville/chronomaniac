@@ -40,10 +40,10 @@ export default class Game {
 
 		// create a new map
 		this.map = new TileMap(this.settings, this.startTime);
-		this.watch = new WatchUI({
-			width: 11,
-			height: 13
-		});
+		// this.watch = new WatchUI({
+		// 	width: 11,
+		// 	height: 13
+		// });
 
 		// dev
 		this.map.lit = true;
@@ -108,7 +108,9 @@ export default class Game {
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));
 
 		if (this.currentTick < this.timeFrontier) {
-			this.actors.push(this.player.clone(temporalDistance));
+			let clone = this.player.clone(temporalDistance);
+			clone.color = new Color("lightgrey");
+			this.actors.push(clone);
 		}
 
 		// add a TimeTravel action to current player's timeline
