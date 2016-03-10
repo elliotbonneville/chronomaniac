@@ -10,7 +10,7 @@ export default class Timeline {
 	}
 
 	get inPast() {
-		return this.currentTick < this.events.length;
+		return this.currentTick < this.events.length - 1;
 	}
 
 	get inFuture() {

@@ -56,7 +56,7 @@ export default class Game {
 		this.actors = [];
 
 		// make da player
-		let tile = this.map.randomTile(undefined, 15, 15);
+		let tile = this.map.randomTile(undefined, undefined, 15, 15);
 
 		this.player = new Player(this.map, tile);
 		// this.actors.push(this.player);
@@ -75,8 +75,11 @@ export default class Game {
 
 		this.currentTick++;
 
+		// update the map!
+		this.map.tick(this.currentTick);
+
 		// calculates light from lights on the map
-		game.map.light.update();
+		this.map.light.update();
 
 		// update lava flows
 
@@ -91,6 +94,9 @@ export default class Game {
 	// do what's necessary to make time travel happen
 	timeTravel(temporalDistance) {
 		this.currentTick += temporalDistance;
+
+		// generate all lava from beginning
+		this.map.generateLava(this.currentTick);
 
 		// clone current player and don't add them to the list of actors
 		this.actors.forEach(actor => actor.timeline.travel(temporalDistance));

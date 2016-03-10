@@ -2,9 +2,9 @@ import PerlinGenerator from "proc-noise";
 import Rect from "~/utils/rect";
 import WallTile from "~/tiles/wall.tile";
 
-export default function (map) {
+export default function (map, mt) {
 	let mapRect = new Rect(0, 0, map.options.width, map.options.height),
-		Perlin = new PerlinGenerator();
+		Perlin = new PerlinGenerator(mt());
 
 	mapRect.forEach(p => {
 		let tile = map.tile(p);
@@ -13,6 +13,6 @@ export default function (map) {
 			return;
 		}
 
-		map.tile(p).noise = Math.round(Perlin.noise(p.x / 5, p.y / 5) * 15);
+		map.tile(p).elevation = Math.round(Perlin.noise(p.x / 5, p.y / 5) * 15);
 	});
 }

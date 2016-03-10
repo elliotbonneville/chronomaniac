@@ -4,7 +4,7 @@ import Timeline from "~/actor/timeline";
 export default class Actor {
 	constructor(
 		map,
-		position = map.randomTile(),
+		position,
 		timeline = new Timeline(this)
 	) {
 		this.map = map;
@@ -92,7 +92,7 @@ export default class Actor {
 		this.tile.render();
 	}
 
-	// returns a new event representing the action
+	// returns a new event representing the action the actor just took
 	save(action) {
 		return {
 			action,

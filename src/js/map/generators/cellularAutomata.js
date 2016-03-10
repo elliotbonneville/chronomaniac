@@ -2,10 +2,12 @@ import Rect from "~/utils/rect";
 import FloorTile from "~/tiles/floor.tile";
 import WallTile from "~/tiles/wall.tile";
 
-export default function (map) {
+import Random from "random-js";
+
+export default function (map, mt) {
 	let mapRect = new Rect(0, 0, map.options.width, map.options.height);
 	mapRect.forEach(p => {
-		map.tile(p).replace(new (Math.random() < 0.45 ? WallTile : FloorTile)(p, map));
+		map.tile(p).replace(new (Random.real(0, 1)(mt) < 0.45 ? WallTile : FloorTile)(p, map));
 	});
 
 	let i = 2;

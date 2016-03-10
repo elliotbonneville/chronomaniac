@@ -1,4 +1,5 @@
 import Rect from "~/utils/rect";
+import Random from "random-js";
 
 export default class Point {
 	constructor(x, y) {
@@ -30,8 +31,11 @@ export default class Point {
 		return p;
 	}
 
-	static random(x = 1, y = 1) {
-		return new Point(Math.floor(Math.random() * x), Math.floor(Math.random() * y));
+	static random(engine, x = 1, y = 1) {
+		let rx = Random.integer(0, x)(engine),
+			ry = Random.integer(0, y)(engine);
+
+		return new Point(rx, ry);
 	}
 
 	get inverse() {
