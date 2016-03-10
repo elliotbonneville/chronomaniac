@@ -130,6 +130,17 @@ export default class Game {
 			this.actors.push(clone);
 		}
 
+		// make sure that only levers that have already been thrown stay that way
+		this.map.levers.forEach(lever => {
+			if (lever.thrownTime > this.currentTick) {
+				lever.unthrowLever();
+			} else if (lever.thrownTime !== null && 
+				lever.thrownTime <= this.currentTick && 
+				!lever.leverThrown) {
+				lever.throwLever(true);
+			}
+		});
+
 		// play all actors from beginning of time up until this tick
 		this.actors.forEach(actor => actor.timeline.replayUntil(this.currentTick));
 		this.player.tile.actor = this.player;
@@ -147,6 +158,21 @@ export default class Game {
 	}
 
 	win() {
-		console.log("You win the game!");
+		// you can only win the game once, because the cake is a lie
+		if (this.won) {
+			return;
+		}
+
+		game.log.message(
+			"As you flip the final lever, your watch",
+			"begins to vibrate. It quickly absorbs the",
+			"temporal energy released by the mechanisms the",
+			"levers activated. You've got enough juice now",
+			"to go wherever you want, whenever you want.",
+			"Just remember -- be excellent to each other.",
+			"",
+			"                 >> YOU WIN <<");
+
+		game.input.setContext("win");
 	}
 }

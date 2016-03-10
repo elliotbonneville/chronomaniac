@@ -30,6 +30,7 @@ export default class Timeline {
 	clone() {
 		return new Timeline(null, this.events.map((event) => {
 			return {
+				action: event.action.clone(),
 				before: {
 					actorsVisible: [...event.before.actorsVisible],
 					position: event.before.position.clone()
@@ -56,7 +57,8 @@ export default class Timeline {
 		this.tick += temporalDistance;
 
 		if (this.currentEvent) {
-			this.actor.position = this.currentEvent.after.position;
+			this.actor.position = this.currentEvent.before.position;
+			this.actor.do(this.currentEvent.action, false);
 		} else {
 			this.actor.remove();
 		}

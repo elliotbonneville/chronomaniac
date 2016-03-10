@@ -3,6 +3,7 @@ import Point from "~/utils/point";
 import Color from "~/renderer/color";
 
 import FloorTile from "~/tiles/floor.tile";
+import LeverTile from "~/tiles/lever.tile";
 import generateCellularAutomata from "~/map/generators/cellularAutomata";
 import generatePerlinNoise from "~/map/generators/perlinNoise";
 
@@ -24,6 +25,7 @@ export default class Map extends EventHandler {
 		this.lighting = {};
 		this.tiles = [];
 		this.lavaTiles = [];
+		this.levers = [];
 
 		this.visibleFromPoint = visibleFromPoint.bind(null, this);
 
@@ -60,10 +62,22 @@ export default class Map extends EventHandler {
 		// this.light.calculate(lamp);
 
 		// console.log(t, lamp);
+
+		// place levers for le win condition
+		let i = 0;
+		while (i < 4) {
+			let p = this.randomTile(undefined, FloorTile, 25, 25),
+				tile = this.tile(p);
+
+			tile.replace(new LeverTile(p, this));
+			this.levers.push(this.tile(p));
+			i++;
+		}
+
 		this.emit("redraw");
 	}
 
-	// generate lava from 0 to tick x
+	// generate lava from 0 to tick x (cic)
 	generateLava(startTime, finalTick) {
 		// remove all lava from the scene and recalculate it from start
 		let i = this.lavaTiles.length;

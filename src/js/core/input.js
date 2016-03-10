@@ -63,6 +63,7 @@ let input = {
 				}
 			},
 			escape: () => {
+				game.log.replaceMessage(`You decide to travel ${input.state.direction}. How far? ${input.state.value}`);
 				game.log.message(`You resist the urge to turn your watch ${input.state.direction}.`);
 				input.rejectTravelInput();
 			}
@@ -80,7 +81,7 @@ let input = {
 	},
 
 	initiateTravelInput() {
-		game.log.message(`You decide to travel ${this.state.direction}. How far?`);
+		game.log.message(`You decide to travel ${this.state.direction}. How far? _`);
 		this.setContext("type");
 	},
 
@@ -91,10 +92,11 @@ let input = {
 	},
 
 	updateTravelInput() {
-		game.log.replaceMessage(`You decide to travel ${this.state.direction}. How far? ${this.state.value}`);
+		game.log.replaceMessage(`You decide to travel ${this.state.direction}. How far? ${this.state.value}_`);
 	},
 
 	acceptTravelInput(temporalDistance) {
+		game.log.replaceMessage(`You decide to travel ${this.state.direction}. How far? ${this.state.value}`);
 		input.state.direction = null;
 		input.state.value = "";
 		game.timeTravel(temporalDistance);

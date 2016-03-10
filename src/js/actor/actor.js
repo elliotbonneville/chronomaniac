@@ -86,6 +86,7 @@ export default class Actor {
 
 		if (save !== false && event.occurred) {
 			this.timeline.advance({
+				action,
 				before: pastState,
 				after: this.save()
 			});
@@ -126,7 +127,7 @@ export default class Actor {
 	}
 
 	// returns a new event representing the action the actor just took
-	save() {
+	save(action) {
 		return {
 			actorsVisible: this.visible(t => t.actor !== null && t.actor !== this),
 			position: this.position.clone()
