@@ -118,8 +118,8 @@ export default class Game {
 
 	// do what's necessary to make time travel happen
 	timeTravel(temporalDistance) {
-		if (this.currentTick + temporalDistance < 0) {
-			console.log("Can't travel back that far!");
+		if (this.currentTick + temporalDistance < 0 || Math.abs(temporalDistance) > 30) {
+			game.log.message("Your watch won't go that far.");
 			return;
 		}
 

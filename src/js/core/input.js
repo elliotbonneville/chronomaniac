@@ -18,14 +18,83 @@ let input = {
 			"down": game => {return movePlayer(game, new Point(0, 1))},
 			"left": game => {return movePlayer(game, new Point(-1, 0))},
 			"right": game => {return movePlayer(game, new Point(1, 0))},
-			"space": game => {return game.player.do(new ThrowLeverAction())}
+			"space": game => {return game.player.do(new ThrowLeverAction())},
+			">": game => {
+				input.state.direction = "forward";
+				input.initiateTravelInput();
+				return {
+					occurred: false
+				};
+			},
+			"<": game => {
+				input.state.direction = "backward";
+				input.initiateTravelInput();
+				return {
+					occurred: false
+				};
+			}
+		},
+
+		type: {
+			1: true,
+			2: true,
+			3: true,
+			4: true,
+			5: true,
+			6: true,
+			7: true,
+			8: true,
+			9: true,
+			0: true,
+			backspace: () => {
+				let val = input.state.value;
+				input.state.value = val.substr(0, val.length - 1);
+				input.updateTravelInput();
+			},
+			enter: () => {
+				let temporalDistance = parseInt(input.state.value, 10) *
+					(input.state.direction === "forward" ? 1 : -1);
+
+				if (temporalDistance == 0 || isNaN(temporalDistance)) {
+					game.log.message("Why, that's silly!");
+					input.rejectTravelInput();
+				} else {
+					input.acceptTravelInput(temporalDistance);
+				}
+			}
 		}
 	},
+	state: {
+		direction: null,
+		value: ""
+	},
 
-	init: function (game) {
+	init (game) {
 		this.setContext("walk");
 
 		return this;
+	},
+
+	initiateTravelInput() {
+		game.log.message(`Travel how many turns ${this.state.direction}? `);
+		this.setContext("type");
+	},
+
+	rejectTravelInput() {
+		input.state.direction = null;
+		input.state.value = "";
+		input.setContext("walk");
+	},
+
+	updateTravelInput() {
+		game.log.replaceMessage(`Travel how many turns ${this.state.direction}? ${this.state.value}`);
+	},
+
+	acceptTravelInput(temporalDistance) {
+		input.state.direction = null;
+		input.state.value = "";
+		game.timeTravel(temporalDistance);
+		input.setContext("walk");
 	},
 
 	setContext(context) {
@@ -37,15 +106,26 @@ let input = {
 		let contextEvents = this.events[context];
 		
 		for (let eventTrigger in contextEvents) {
-			Mousetrap.bind(eventTrigger, () => {
-				let event = contextEvents[eventTrigger](game);
+			Mousetrap.bind(eventTrigger, (e) => {
+				e.preventDefault();
+				if (context !== "type") {
+					let event = contextEvents[eventTrigger](game);
 
-				if (!this.waiting && event.occurred) {
-					this.waiting = true;
-					game.tick();
+					if (!this.waiting && event.occurred) {
+						this.waiting = true;
+						game.tick();
+					}
+				} else {
+					// if we are typing, handle this specially...
+					if (e.code.indexOf("Digit") > -1) {
+						this.state.value += e.code.replace("Digit", "");
+						this.updateTravelInput();
+					} else {
+						contextEvents[eventTrigger]();
+					}
 				}
 			});
-		}	
+		}
 	},
 
 	waiting: false

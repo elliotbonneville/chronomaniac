@@ -13,11 +13,7 @@ export default class LogUI extends UI {
 		this.drawBox(new Rect(0, 0, this.settings.width - 1, this.settings.height - 1));
 	}
 
-	message() {
-		let messages = [...arguments];
-		messages.reverse();
-		this.messages = messages.concat(this.messages);
-
+	renderMessages() {
 		this.clear(new Rect(1, 1, this.settings.width - 1, this.settings.height - 1));
 		this.messages.every((message, i) => {
 			if (message.length > this.settings.width - 2) {
@@ -32,5 +28,18 @@ export default class LogUI extends UI {
 
 			return true;
 		});
+	}
+
+	message() {
+		let messages = [...arguments];
+		messages.reverse();
+		this.messages = messages.concat(this.messages);
+
+		this.renderMessages();
+	}
+
+	replaceMessage(replacement) {
+		this.messages[0] = replacement;
+		this.renderMessages();
 	}
 }
