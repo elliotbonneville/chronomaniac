@@ -56,21 +56,22 @@ export default class Map extends EventHandler {
 
 		this.light = new LightRenderer(this);
 
-		// let t = this.randomTile(mt, FloorTile, 30, 30),
-		// 	lamp = new Light(t, 10, new Color("orange"));
-
-		// this.light.calculate(lamp);
-
-		// console.log(t, lamp);
-
 		// place levers for le win condition
 		let i = 0;
 		while (i < 4) {
 			let p = this.randomTile(undefined, FloorTile, 25, 25),
 				tile = this.tile(p);
 
-			tile.replace(new LeverTile(p, this));
-			this.levers.push(this.tile(p));
+			let elevation = tile.elevation,
+				lever = new LeverTile(p, this);
+			
+			tile.replace(lever);
+			this.levers.push(lever);
+
+			let lastColor = lever.color;
+			lever.elevation = elevation;
+			lever.color = lastColor;
+			
 			i++;
 		}
 

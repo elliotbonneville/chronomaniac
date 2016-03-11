@@ -88,7 +88,17 @@ export default class Game {
 	}
 
 	lose() {
-		console.log("Your character died. You lost the game.");
+		// you can only lose once because we don't want to hurt the player's feelings
+		if (game.lost) {
+			return;
+		}
+
+		game.log.message("You melted in lava. Oops.",
+			"",
+			"                >> YOU LOSE <<");
+
+		game.input.setContext("lose");
+		game.lost = true;
 	}
 
 	tick() {
@@ -97,11 +107,15 @@ export default class Game {
 		this.map.light.update();
 		this.actors.forEach(actor => actor.takeTurn());
 
+		// update the camera's position so that the player is centered
+		this.map.
+
+		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
 	}
 
-	// do what's necessary to make time travel happen
 	timeTravel(temporalDistance) {
+		// don't let the player travel too far in any one direction
 		if (this.currentTick + temporalDistance < 0 || Math.abs(temporalDistance) > 50) {
 			game.log.message("Your watch won't go that far.");
 			return;
@@ -149,12 +163,8 @@ export default class Game {
 		this.actors.forEach(actor => actor.timeline.replayUntil(this.currentTick));
 		this.player.tile.actor = this.player;
 
-		// set the current tick of the actor to match the tick of the rest of the game,
-		// but don't replay any events, as we want to overwrite them all, of course
-		
-
-		// add a TimeTravel action to current player's timeline (which is really a null
-		// action, as clones won't actually time travel, they'll just be removed)
+		// add a TimeTravel action to current player's timeline to synchronize them with
+		// the current time of the game world
 		this.player.do(new TimeTravelAction({
 			destination: this.currentTick,
 			distance: temporalDistance
