@@ -100,6 +100,8 @@ export default class Actor {
 		if (this.tile.actor === this) {
 			this.tile.actor = null;
 		}
+
+		this.tile.render();
 	}
 
 	// break in case of emergency paradox

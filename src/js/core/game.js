@@ -125,9 +125,13 @@ export default class Game {
 			// ...so we need to clone them in order to keep all their actions in the 
 			// timeline, and by leaving the player alone allow them to create a new
 			// span of time in which to act
-			let clone = this.player.clone();
-			clone.color = new Color("lightgrey");
-			this.actors.push(clone);
+			let actor = this.player,
+				clone = this.player.clone();
+			
+			game.player = clone;
+
+			actor.color = new Color("lightgrey");
+			this.actors.push(actor);
 		}
 
 		// make sure that only levers that have already been thrown stay that way
@@ -137,7 +141,7 @@ export default class Game {
 			} else if (lever.thrownTime !== null && 
 				lever.thrownTime <= this.currentTick && 
 				!lever.leverThrown) {
-				lever.throwLever(true);
+				lever.throwLever(undefined, true);
 			}
 		});
 

@@ -9,16 +9,17 @@ export default class LeverTile extends Tile {
 		this._color = new Color("red");
 		this._backgroundColor = new Color("black");
 
-		this.opaque = true;
+		this.opaque = false;
 		this.walkable = true;
 
 		this.leverThrown = false;
 		this.thrownTime = null;
+		this.thrower = null;
 
 		this.map.update(this);
 	}
 
-	throwLever(silently) {
+	throwLever(actor, silently) {
 		if (this.leverThrown) {
 			if (!silently && game.player.visible(tile => tile === this).length) {
 				game.log.message("You take a good, long look at the thrown lever.");
@@ -34,6 +35,7 @@ export default class LeverTile extends Tile {
 			this.thrownTime = this.thrownTime === null ?
 				game.currentTick :
 				this.thrownTime;
+			this.thrower = actor || this.thrower;
 
 			this._character = "/";
 			this.render();

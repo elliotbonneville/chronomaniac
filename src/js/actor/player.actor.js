@@ -28,15 +28,31 @@ export default class Player extends Actor {
 			
 			game.player = this;
 			game.player.color = new Color("white");
-			game.actors.splice(game.actors.indexOf(this), 1);
 
-			// let i = game.actors.length - 1;
+			// loop through actors including this one and remove them from the map and
+			// the future, because their timeline has been actually completely erased
+			let i = game.actors.indexOf(this),
+				end = game.actors.length;
 
-			// while (i--) {
-			// 	if (game.actors[i].spawnTime > this.spawnTime) {
-			// 		game.actors[i].erase();
-			// 	}
-			// }
+			while (i < end) {
+				if (game.actors[i] !== game.player) {
+					game.actors[i].remove();
+				}
+
+				this.map.levers.forEach(lever => {
+					console.log(lever.thrower === game.actors[i], lever.thrower, game.actors[i]);
+					if (lever.thrower == game.actors[i]) {
+						lever.thrower = null;
+						lever.thrownTime = null;
+
+						console.log(lever);
+					}
+				});
+
+				i++;
+			}
+
+			game.actors.length = game.actors.indexOf(this);
 
 			this.timeline.clearFuture();
 			game.log.message(
