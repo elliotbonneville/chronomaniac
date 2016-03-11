@@ -48,6 +48,7 @@ export class LightRenderer {
 							
 								// add the light interaction to the tile
 								t.lighting.push(new LightInteraction(this.light.color, l));
+								t.seen = true;
 								t.render();
 						} 
 						
@@ -84,10 +85,10 @@ export class LightRenderer {
 		this.light = light;
 
 		// update the tile the light is on because it won't be calculated
-		this.map.tile(this.light.position).lighting = 
-			[new LightInteraction(light.color, light.radius)];
-
-		this.map.tile(this.light.position).render();
+		let tile = this.map.tile(this.light.position);
+		tile.lighting = [new LightInteraction(light.color, light.radius)];
+		tile.seen = true;
+		tile.render();
 
 		// calculate each octant
 		for(i = 0; i < 8; i++) {
@@ -100,7 +101,7 @@ export class LightRenderer {
 	update() {
 		for (let tileCoordinates in this.map.lighting) {
 			delete this.map.lighting[tileCoordinates];
-			game.map.tile(tileCoordinates.split(",")).render();
+			// game.map.tile(tileCoordinates.split(",")).render();
 		}
 	}
 }

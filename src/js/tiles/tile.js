@@ -33,13 +33,19 @@ export default class Tile {
 	get character() {
 		let baseChar = this._character;
 
-		if (this.lava > 20) {
-			baseChar = "*";
-		} else if (this.lava) {
-			baseChar = "÷"
+		if (this.lighting.length) {
+			if (this.lava > 20) {
+				baseChar = "*";
+			} else if (this.lava) {
+				baseChar = "÷"
+			}
+
+			if (this._actor) {
+				baseChar = this._actor.character;
+			}
 		}
 
-		return this._actor ? this._actor.character : baseChar;
+		return baseChar;
 	}
 
 	set character(character) {
@@ -65,6 +71,8 @@ export default class Tile {
 			}, 0) / this.lighting.length;
 
 			return col;
+		} else if (this.seen) {
+			return new Color(255, 255, 255, 0.1);
 		} else {
 			return new Color(0, 0, 0, 0);
 		}
@@ -84,6 +92,9 @@ export default class Tile {
 			}, 0) / this.lighting.length;
 			return baseColor;
 		} else if (this.map.lit) {
+			return baseColor;
+		} else if (this.seen) {
+			baseColor.a = 0.3;
 			return baseColor;
 		}
 	}

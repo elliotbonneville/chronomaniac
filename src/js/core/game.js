@@ -62,7 +62,7 @@ export default class Game {
 		});
 
 		// dev
-		this.map.lit = true;
+		// this.map.lit = true;
 
 		// create a new view for the map
 		this.display.addView("mapBox", new View(new Rect(0, 0, 35, 25), this.outerBox));
@@ -79,7 +79,14 @@ export default class Game {
 		this.actors = [];
 
 		// create the player on a random tile
-		this.player = new Player(this.map, this.map.randomTile());
+		let playerTile = this.map.randomTile();
+		
+		this.player = new Player(this.map, playerTile);
+		this.lamp = new Light(playerTile, 6, new Color("white"));
+		
+		this.map.light.update();
+		this.map.light.calculate(this.lamp);
+
 		this.centerCamera();
 
 		// and render the new stuff
@@ -103,10 +110,14 @@ export default class Game {
 	tick() {
 		this.currentTick++;
 		this.map.tick(this.currentTick + this.startTime);
-		this.map.light.update();
 		this.actors.forEach(actor => actor.takeTurn());
 
 		this.centerCamera();
+
+		this.lamp.position = this.player.position.clone();
+	
+		this.map.light.update();
+		this.map.light.calculate(this.lamp);
 
 		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
