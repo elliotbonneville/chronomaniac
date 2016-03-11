@@ -3,7 +3,7 @@ import Point from "./point";
 export default class Rect {
 	constructor(x1, y1, x2, y2) {
 		if (!new.target) {
-			return new Rect(topLeft, bottomRight);
+			return new Rect(x1, y1, x2, y2);
 		}
 
 		let topLeft = new Point(x1, y1),

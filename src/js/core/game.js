@@ -25,13 +25,14 @@ export default class Game {
 
 		// create a new display as well, the first time the page is loaded
 		this.display = new Display(this.settings);
-		this.begin();
 
 		// bind keyboard handlers
 		this.input = input.init(this);
 
 		// initialize tick count
 		this.currentTick = 0;
+
+		this.begin();
 	}
 
 	begin() {
@@ -58,7 +59,8 @@ export default class Game {
 
 		this.infoPanel = new InfoPanelUI({
 			width: 15,
-			height: 25
+			height: 25,
+			game: this
 		});
 
 		// dev
@@ -119,6 +121,9 @@ export default class Game {
 		this.map.light.update();
 		this.map.light.calculate(this.lamp);
 
+		// update UIs
+		this.infoPanel.draw();
+
 		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
 	}
@@ -178,6 +183,8 @@ export default class Game {
 			destination: this.currentTick,
 			distance: temporalDistance
 		}));
+
+		this.infoPanel.draw();
 	}
 
 	win() {

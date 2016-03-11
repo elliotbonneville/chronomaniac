@@ -4,6 +4,7 @@ import Point from "~/utils/point";
 import * as camera from "~/tools/camera";
 import MoveAction from "~/actor/actions/move.action";
 import ThrowLeverAction from "~/actor/actions/throwLever.action";
+import DeployMarkerAction from "~/actor/actions/deployMarker.action";
 
 // convenience method to move the player
 function movePlayer(game, direction) {
@@ -18,6 +19,7 @@ let input = {
 			"down": game => {return movePlayer(game, new Point(0, 1))},
 			"left": game => {return movePlayer(game, new Point(-1, 0))},
 			"right": game => {return movePlayer(game, new Point(1, 0))},
+			".": game => {return movePlayer(game, new Point(0, 0))},
 			"space": game => {return game.player.do(new ThrowLeverAction())},
 			">": game => {
 				input.state.direction = "forward";
@@ -29,6 +31,12 @@ let input = {
 			"<": game => {
 				input.state.direction = "backward";
 				input.initiateTravelInput();
+				return {
+					occurred: false
+				};
+			},
+			"enter": game => {
+				input.initiateMarkerInput();
 				return {
 					occurred: false
 				};
@@ -67,6 +75,22 @@ let input = {
 				game.log.message(`You resist the urge to turn your watch ${input.state.direction}.`);
 				input.rejectTravelInput();
 			}
+		},
+
+		"markerInput": {
+			alphabet: letter => {
+				input.updateMarkerInput(letter)
+			},
+			backspace: () => {
+				input.shortenMarkerInput();
+			},
+			escape: () => {
+				input.rejectMarkerInput();
+				game.log.message("You decide not to create a temporal marker.");
+			},
+			enter: () => {
+				input.acceptMarkerInput();
+			}
 		}
 	},
 	state: {
@@ -80,6 +104,7 @@ let input = {
 		return this;
 	},
 
+	/* time travel input */
 	initiateTravelInput() {
 		game.log.message(`You decide to travel ${this.state.direction}. How far? _`);
 		this.setContext("type");
@@ -103,18 +128,76 @@ let input = {
 		input.setContext("walk");
 	},
 
+	/* temporal marker input */
+	initiateMarkerInput() {
+		game.log.message("You set your watch to place a temporal marker.");
+		game.log.message("What do you want to name it? _");
+		input.setContext("markerInput");
+	},
+
+	shortenMarkerInput() {
+		this.state.value = this.state.value.substr(0, this.state.value.length - 1);
+		game.log.replaceMessage(`What do you want to name it? ${this.state.value}_`);
+	},
+
+	updateMarkerInput(letter) {
+		if (this.state.value.length >= 8) {
+			return;
+		}
+
+		this.state.value += letter;
+		game.log.replaceMessage(`What do you want to name it? ${this.state.value}_`);
+	},
+
+	rejectMarkerInput() {
+		game.log.replaceMessage("What do you want to name it?");
+		input.state.value = "";
+		input.setContext("walk");
+	},
+
+	acceptMarkerInput() {
+		game.log.replaceMessage(`What do you want to name it? ${this.state.value}`);
+
+		game.infoPanel.addMarker({
+			time: game.currentTick,
+			name: input.state.value
+		});
+
+		game.infoPanel.draw();
+		input.state.value = "";
+		input.setContext("walk");
+		game.log.message("You deploy a temporal marker.");
+	},
+
 	setContext(context) {
 		let oldTriggers = this.events[this.context];
 		for (let eventTrigger in oldTriggers) {
+			if (eventTrigger === "alphabet") {
+				"abcdefghijklmnopqrstuvwxyz".split("").forEach(letter => {
+					Mousetrap.unbind(letter);
+				});
+				continue;
+			}
+
 			Mousetrap.unbind(eventTrigger);
 		}
 
 		let contextEvents = this.events[context];
 		
 		for (let eventTrigger in contextEvents) {
+			if (eventTrigger === "alphabet") {
+				"abcdefghijklmnopqrstuvwxyz".split("").forEach(letter => {
+					Mousetrap.bind(letter, (e) => {
+						e.preventDefault();
+						contextEvents["alphabet"](letter);
+					});
+				});
+				continue;
+			}
+
 			Mousetrap.bind(eventTrigger, (e) => {
 				e.preventDefault();
-				if (context !== "type") {
+				if (context !== "type" && context !== "markerInput") {
 					let event = contextEvents[eventTrigger](game);
 
 					if (!this.waiting && event.occurred) {

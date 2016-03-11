@@ -6,29 +6,24 @@ export default class LogUI extends UI {
 	constructor(settings) {
 		super(settings);
 
-		this.messages = [];
+		this.markers = [];
 	}
 
 	draw() {
+		this.clear();
 		this.drawBox(new Rect(0, 0, this.settings.width - 1, this.settings.height - 1));
+
+		this.drawLabel(new Point(2, 2), `Turn: ${this.settings.game.currentTick}`);
+		this.drawLabel(new Point(1, 4), " - markers - ");
+
+		this.markers.forEach((marker, i) => {
+			let difference = game.currentTick - marker.time;
+
+			this.drawLabel(new Point(2, 6 + i), `${marker.name}: ${difference}`);
+		});
 	}
 
-	message(message) {
-		this.messages.unshift(message);
-
-		this.clear(new Rect(1, 1, this.settings.width - 2, this.settings.height - 2));
-		this.messages.every((message, i) => {
-			if (message.length > 40) {
-				message = message.substr(0, 45) + "...";
-			}
-
-			this.drawLabel(new Point(1, 8 - i), message);
-
-			if (i == 7) {
-				return false;
-			}
-
-			return true;
-		});
+	addMarker(data) {
+		this.markers.push(data);
 	}
 }
