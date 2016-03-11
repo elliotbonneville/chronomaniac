@@ -43,6 +43,8 @@ export default class Rect {
 				callback(new Point(x, y));
 			}
 		}
+
+		return this;
 	}
 
 	intersects(other) {

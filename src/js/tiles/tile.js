@@ -33,7 +33,7 @@ export default class Tile {
 	get character() {
 		let baseChar = this._character;
 
-		if (this.lavaSource) {
+		if (this.lava > 20) {
 			baseChar = "*";
 		} else if (this.lava) {
 			baseChar = "÷"
@@ -155,8 +155,10 @@ export default class Tile {
 	set elevation(elevation) {
 		this._elevation = elevation;
 
-		let bgChannel = elevation * 7,
-			fgChannel = elevation * 30;
+		let scaledElevation = (elevation / 10) * 15;
+
+		let bgChannel = scaledElevation * 7,
+			fgChannel = scaledElevation * 30;
 
 		this.backgroundColor = new Color(bgChannel, bgChannel, bgChannel);
 		this.color = new Color(fgChannel, fgChannel, fgChannel);
@@ -171,10 +173,6 @@ export default class Tile {
 	}
 
 	updateLava(mt) {
-		if (this.lavaSource) {
-			this.lava++;
-		}
-
 		this.neighbors.sort((a, b) => {
 			return (a.lava + a.elevation) - (b.lava + b.elevation);
 		}).every(tile => {
@@ -182,7 +180,7 @@ export default class Tile {
 				return false;
 			}
 
-			if (!tile.walkable) {
+			if (!tile.walkable || tile.lever) {
 				return;
 			}
 

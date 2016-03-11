@@ -1,11 +1,15 @@
 import EventHandler from "events";
 import Point from "~/utils/point";
+import Rect from "~/utils/rect";
 import Color from "~/renderer/color";
 
 import FloorTile from "~/tiles/floor.tile";
 import LeverTile from "~/tiles/lever.tile";
+import WallTile from "~/tiles/wall.tile";
 import generateCellularAutomata from "~/map/generators/cellularAutomata";
 import generatePerlinNoise from "~/map/generators/perlinNoise";
+import findCaverns from "~/map/generators/findCaverns";
+import createBorders from "~/map/generators/createBorders";
 
 import {LightRenderer, Light} from "~/map/light";
 import visibleFromPoint from "~/map/visibleFromPoint";
@@ -39,8 +43,8 @@ export default class Map extends EventHandler {
 			tile = this.tile(this.randomTile(undefined, FloorTile));
 		}
 
-		tile.lavaSource = true;
-		tile.lava = 1;		
+		// tile.lavaSource = true;
+		tile.lava = Random.integer(10, 30)(mt);		
 	}
 
 	generate() {
@@ -51,8 +55,24 @@ export default class Map extends EventHandler {
 			}
 		}
 
-		// generateCellularAutomata(this, mt);
+		let mapRect = new Rect(0, 0, this.options.width, this.options.height);
+
+		// generate some random caverns with cellular automata
+		generateCellularAutomata(this, mt, mapRect);
+
+		// use floodfill to drop all disconnected caverns
+		let caverns = findCaverns(this, mapRect),
+			main = caverns.sort().pop();
+
+		caverns.forEach(cavern => cavern.forEach(tile => {
+			tile.replace(new WallTile(tile.position.clone(), this));
+		}));
+
+		// generate perlin noise to assign elevations to all floor tiles
 		generatePerlinNoise(this, mt);
+
+		// place walls around the entire map so the player can't go off it anywhere
+		createBorders(this);
 
 		this.light = new LightRenderer(this);
 
@@ -113,7 +133,7 @@ export default class Map extends EventHandler {
 	tick(currentTick) {
 		mt.seed(currentTick);
 
-		if (Random.bool(0.03)(mt)) {
+		if (Random.bool(0.2)(mt)) {
 			this.createLavaFlow();
 		}
 

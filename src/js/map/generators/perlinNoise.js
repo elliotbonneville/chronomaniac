@@ -13,6 +13,6 @@ export default function (map, mt) {
 			return;
 		}
 
-		map.tile(p).elevation = Math.round(Perlin.noise(p.x / 4, p.y / 4) * 20);
+		map.tile(p).elevation = Math.round(Perlin.noise(p.x / 4, p.y / 4) * 10);
 	});
 }

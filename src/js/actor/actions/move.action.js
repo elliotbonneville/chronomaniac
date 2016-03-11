@@ -11,6 +11,10 @@ export default class MoveAction extends Action {
 		let newPos = actor.position.add(this.data.direction),
 			tile = actor.map.tile(newPos);
 
+		if (!tile) {
+			return false;
+		}
+
 		if (tile.lava) {
 			game.log.message("You suppress an impulse to dive into the lava.");
 			return false;

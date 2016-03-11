@@ -12,6 +12,7 @@ export default class LeverTile extends Tile {
 		this.opaque = false;
 		this.walkable = true;
 
+		this.lever = true;
 		this.leverThrown = false;
 		this.thrownTime = null;
 		this.thrower = null;
