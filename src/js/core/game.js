@@ -79,9 +79,8 @@ export default class Game {
 		this.actors = [];
 
 		// create the player on a random tile
-		let tile = this.map.randomTile(undefined, undefined, 15, 15);
-
-		this.player = new Player(this.map, tile);
+		this.player = new Player(this.map, this.map.randomTile());
+		this.centerCamera();
 
 		// and render the new stuff
 		this.display.render();
@@ -107,13 +106,7 @@ export default class Game {
 		this.map.light.update();
 		this.actors.forEach(actor => actor.takeTurn());
 
-		// update the camera's position so that the player is centered
-		let view = this.display.views.map,
-			halfWidth = Math.round(view.rect.width / 2),
-			halfHeight = Math.round(view.rect.height / 2);
-
-		view.origin = view.rect.bottomRight
-			.subtract(game.player.position.add(halfWidth + 1, halfHeight + 1));
+		this.centerCamera();
 
 		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
@@ -193,5 +186,15 @@ export default class Game {
 			"                 >> YOU WIN <<");
 
 		game.input.setContext("win");
+	}
+
+	centerCamera() {
+		// update the camera's position so that the player is centered
+		let view = this.display.views.map,
+			halfWidth = Math.round(view.rect.width / 2),
+			halfHeight = Math.round(view.rect.height / 2);
+
+		view.origin = view.rect.bottomRight
+			.subtract(this.player.position.add(halfWidth + 1, halfHeight + 1));
 	}
 }

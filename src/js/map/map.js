@@ -33,10 +33,10 @@ export default class Map extends EventHandler {
 	}
 
 	createLavaFlow() {
-		let tile = this.tile(this.randomTile(undefined, FloorTile, 30, 30));
+		let tile = this.tile(this.randomTile(undefined, FloorTile));
 
 		while (Random.real(0, 1)(mt) < .97 && tile.elevation > 5) {
-			tile = this.tile(this.randomTile(undefined, FloorTile, 30, 30));
+			tile = this.tile(this.randomTile(undefined, FloorTile));
 		}
 
 		tile.lavaSource = true;
@@ -59,7 +59,7 @@ export default class Map extends EventHandler {
 		// place levers for le win condition
 		let i = 0;
 		while (i < 4) {
-			let p = this.randomTile(undefined, FloorTile, 25, 25),
+			let p = this.randomTile(undefined, FloorTile),
 				tile = this.tile(p);
 
 			let elevation = tile.elevation,
