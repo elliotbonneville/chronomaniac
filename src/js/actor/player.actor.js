@@ -40,12 +40,9 @@ export default class Player extends Actor {
 				}
 
 				this.map.levers.forEach(lever => {
-					console.log(lever.thrower === game.actors[i], lever.thrower, game.actors[i]);
 					if (lever.thrower == game.actors[i]) {
 						lever.thrower = null;
 						lever.thrownTime = null;
-
-						console.log(lever);
 					}
 				});
 
