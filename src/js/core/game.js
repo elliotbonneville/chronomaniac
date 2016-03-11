@@ -108,7 +108,12 @@ export default class Game {
 		this.actors.forEach(actor => actor.takeTurn());
 
 		// update the camera's position so that the player is centered
-		this.map.
+		let view = this.display.views.map,
+			halfWidth = Math.round(view.rect.width / 2),
+			halfHeight = Math.round(view.rect.height / 2);
+
+		view.origin = view.rect.bottomRight
+			.subtract(game.player.position.add(halfWidth + 1, halfHeight + 1));
 
 		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
