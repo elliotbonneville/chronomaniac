@@ -31,6 +31,11 @@ export default class LogUI extends UI {
 	}
 
 	message() {
+		// no more messages after the game's over! That wouldn't be sensical
+		if (game.won || game.lost) {
+			return;
+		}
+
 		let messages = [...arguments];
 		messages.reverse();
 		this.messages = messages.concat(this.messages);

@@ -186,6 +186,7 @@ export default class Game {
 			"                 >> YOU WIN <<");
 
 		game.input.setContext("win");
+		this.won = true;
 	}
 
 	centerCamera() {
