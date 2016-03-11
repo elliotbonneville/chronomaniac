@@ -79,10 +79,16 @@ export default class Map extends EventHandler {
 		// place levers for le win condition
 		let i = 0;
 		while (i < 4) {
-			let p = this.randomTile(undefined, FloorTile),
-				tile = this.tile(p);
+			let p = this.randomTile(undefined, FloorTile);
 
-			let elevation = tile.elevation,
+			while (this.levers.map(lever => {
+				return lever.position.distance(p)
+			}).sort((a, b) => a - b)[0] < 10) {
+				p = this.randomTile(undefined, FloorTile);
+			}
+
+			let tile = this.tile(p),
+				elevation = tile.elevation,
 				lever = new LeverTile(p, this);
 			
 			tile.replace(lever);
