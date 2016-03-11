@@ -9,8 +9,8 @@ export default class TimeTravelAction extends Action {
 	_apply(actor) {
 		actor.timeline.tick = this.data.destination;
 
-		game.log.message(`You travel ${this.data.distance > 0 ? "forward" : "back"} ` + 
-			`in time ${Math.abs(this.data.distance)} turns.`);
+		game.log.message(`You turn your watch ${Math.abs(this.data.distance)} turns ` +
+			`${this.data.distance > 0 ? "forward" : "back"}.`);
 
 		return true;
 	}

@@ -52,10 +52,7 @@ export default class Player extends Actor {
 			game.actors.length = game.actors.indexOf(this);
 
 			this.timeline.clearFuture();
-			game.log.message(
-				"You spot an older, worn version of yourself",
-				"  looking at you in horror. Immediately, you",
-				"  begin to fade...");
+			game.log.message("Your temporal paradox resolution alert chimes!");
 		}
 	}
 }
