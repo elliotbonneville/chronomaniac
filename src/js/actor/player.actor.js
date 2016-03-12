@@ -53,6 +53,7 @@ export default class Player extends Actor {
 
 			this.timeline.clearFuture();
 			game.log.message("Your temporal paradox resolution alert chimes!");
+			game.render();
 		}
 	}
 }

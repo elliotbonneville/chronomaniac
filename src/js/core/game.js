@@ -86,13 +86,7 @@ export default class Game {
 		this.player = new Player(this.map, playerTile);
 		this.lamp = new Light(playerTile, 6, new Color("white"));
 		
-		this.map.light.update();
-		this.map.light.calculate(this.lamp);
-
-		this.centerCamera();
-
-		// and render the new stuff
-		this.display.render();
+		this.render();
 	}
 
 	lose() {
@@ -109,11 +103,7 @@ export default class Game {
 		game.lost = true;
 	}
 
-	tick() {
-		this.currentTick++;
-		this.map.tick(this.currentTick + this.startTime);
-		this.actors.forEach(actor => actor.takeTurn());
-
+	render() {
 		this.centerCamera();
 
 		this.lamp.position = this.player.position.clone();
@@ -123,6 +113,14 @@ export default class Game {
 
 		// update UIs
 		this.infoPanel.draw();
+	}
+
+	tick() {
+		this.currentTick++;
+		this.map.tick(this.currentTick + this.startTime);
+		this.actors.forEach(actor => actor.takeTurn());
+
+		this.render();
 
 		// run any animations, and then allow the game to receive input again
 		this.input.waiting = false;
@@ -183,8 +181,6 @@ export default class Game {
 			destination: this.currentTick,
 			distance: temporalDistance
 		}));
-
-		this.infoPanel.draw();
 	}
 
 	win() {
