@@ -1,6 +1,8 @@
 import Actor from "~/actor/actor";
 import Color from "~/renderer/color";
 
+import {difference} from "lodash";
+
 export default class Player extends Actor {
 	constructor(map, position, timeline) {
 		super(map, position, timeline);
@@ -21,8 +23,13 @@ export default class Player extends Actor {
 		}
 
 		// check for paradoxes
-		if (this.visible(t => t.actor !== null && t.actor !== this).length !== 
-			this.timeline.currentEvent.after.actorsVisible.length) {
+		let actorsVisible = this.visible(t => t.actor !== null && t.actor !== this),
+			pastActorsVisible = this.timeline.currentEvent.after.actorsVisible,
+			visibleDifference = difference(actorsVisible, pastActorsVisible);
+
+		if (visibleDifference.length) {
+			let currentParadox = visibleDifference
+				.filter(tile => tile.actor === game.player).length;
 
 			game.player.remove();
 			
@@ -52,8 +59,17 @@ export default class Player extends Actor {
 			game.actors.length = game.actors.indexOf(this);
 
 			this.timeline.clearFuture();
-			game.log.message("Your temporal paradox resolution alert chimes!");
-			game.render();
+			game.log.message("Your temporal paradox collapse alert chimes...");
+
+			console.log(currentParadox);
+			if (currentParadox) {
+				game.log.message("You suddenly remember watching yourself vanish",
+					"as you feel reality warping around you, time",
+					"itself bending to set things right.");
+			} else {
+				game.log.message("You ruefully realize you made a paradox earlier",
+					"as the walls of reality collapse about you.");
+			}
 		}
 	}
 }

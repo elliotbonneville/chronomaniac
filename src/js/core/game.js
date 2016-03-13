@@ -104,12 +104,11 @@ export default class Game {
 	}
 
 	render() {
-		this.centerCamera();
-
 		this.lamp.position = this.player.position.clone();
 	
 		this.map.light.update();
 		this.map.light.calculate(this.lamp);
+		this.centerCamera();
 
 		// update UIs
 		this.infoPanel.draw();
@@ -118,7 +117,9 @@ export default class Game {
 	tick() {
 		this.currentTick++;
 		this.map.tick(this.currentTick + this.startTime);
+		
 		this.actors.forEach(actor => actor.takeTurn());
+		this.updateMemories();
 
 		this.render();
 
@@ -174,6 +175,7 @@ export default class Game {
 		// play all actors from beginning of time up until this tick
 		this.actors.forEach(actor => actor.timeline.replayUntil(this.currentTick));
 		this.player.tile.actor = this.player;
+		this.updateMemories();
 
 		// add a TimeTravel action to current player's timeline to synchronize them with
 		// the current time of the game world
@@ -181,6 +183,23 @@ export default class Game {
 			destination: this.currentTick,
 			distance: temporalDistance
 		}));
+
+		this.render();
+	}
+
+	updateMemories() {
+		this.map.memory = {};
+		this.actors.forEach(actor => {
+			if (actor.tile.actor !== actor) {
+				return;
+			}
+
+			let memories = actor.timeline.getFuturePositions(50);
+
+			memories.forEach(memory => {
+				this.map.memory[memory.position.toString()] = memory;
+			});
+		});
 	}
 
 	win() {

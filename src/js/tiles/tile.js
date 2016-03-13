@@ -42,6 +42,8 @@ export default class Tile {
 
 			if (this._actor) {
 				baseChar = this._actor.character;
+			} else if (this.memory) {
+				baseChar = "@";
 			}
 		}
 
@@ -58,6 +60,9 @@ export default class Tile {
 
 		if (this._actor) {
 			baseColor = this._actor.color;
+		} else if (this.memory) {
+			baseColor = new Color("purple");
+			baseColor.a = (10 - this.memory.temporalDistance) / 10;
 		}
 
 		if (this.map.lit) {
@@ -152,6 +157,14 @@ export default class Tile {
 
 	set lighting(lighting) {
 		this.map.lighting[this.position.toString()] = lighting;
+	}
+
+	get memory() {
+		return this.map.memory[this.position.toString()];
+	}
+
+	set memory(memory) {
+		this.map.memory[this.position.toString()] = memory;
 	}
 
 	get neighbors() {

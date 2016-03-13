@@ -27,6 +27,7 @@ export default class Map extends EventHandler {
 		}, options);
 
 		this.lighting = {};
+		this.memory = {};
 		this.tiles = [];
 		this.lavaTiles = [];
 		this.levers = [];

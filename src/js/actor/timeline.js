@@ -43,6 +43,15 @@ export default class Timeline {
 		}, this.tick));
 	}
 
+	getFuturePositions(distance) {
+		return this.events.slice(this.tick + 1, this.tick + distance + 2).map((event, i) => {
+			return {
+				position: event.after.position,
+				temporalDistance: i + 1
+			};
+		});
+	}
+
 	replayUntil(targetTick) {
 		this.tick = targetTick;
 

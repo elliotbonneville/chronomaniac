@@ -171,7 +171,7 @@ let input = {
 
 	setContext(context) {
 		let oldTriggers = this.events[this.context];
-		console.log(oldTriggers);
+
 		for (let eventTrigger in oldTriggers) {
 			if (eventTrigger === "alphabet") {
 				"abcdefghijklmnopqrstuvwxyz".split("").forEach(letter => {
