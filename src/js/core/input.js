@@ -16,10 +16,27 @@ let input = {
 	events: {
 		walk: {
 			"up": game => {return movePlayer(game, new Point(0, -1))},
+			"k": "up",
+			"8": "up",
 			"down": game => {return movePlayer(game, new Point(0, 1))},
+			"j": "down",
+			"2": "down",
 			"left": game => {return movePlayer(game, new Point(-1, 0))},
+			"h": "left",
+			"4": "left",
 			"right": game => {return movePlayer(game, new Point(1, 0))},
+			"l": "right",
+			"6": "right",
 			".": game => {return movePlayer(game, new Point(0, 0))},
+			"5": ".",
+			"y": game => {return movePlayer(game, new Point(-1, -1))},
+			"7": "y",
+			"u": game => {return movePlayer(game, new Point(1, -1))},
+			"9": "u",
+			"b": game => {return movePlayer(game, new Point(-1, 1))},
+			"1": "b",
+			"n": game => {return movePlayer(game, new Point(1, 1))},
+			"3": "n",
 			"space": game => {return game.player.do(new ThrowLeverAction())},
 			">": game => {
 				input.state.direction = "forward";
@@ -197,10 +214,15 @@ let input = {
 				continue;
 			}
 
+			let handler = contextEvents[eventTrigger];
+			if (contextEvents[handler]) {
+				handler = contextEvents[contextEvents[eventTrigger]];
+			}
+
 			Mousetrap.bind(eventTrigger, (e) => {
 				e.preventDefault();
 				if (context !== "type" && context !== "markerInput") {
-					let event = contextEvents[eventTrigger](game);
+					let event = handler(game);
 
 					if (!this.waiting && event.occurred) {
 						this.waiting = true;
