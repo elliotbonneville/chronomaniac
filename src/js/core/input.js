@@ -221,6 +221,11 @@ let input = {
 
 			Mousetrap.bind(eventTrigger, (e) => {
 				e.preventDefault();
+
+				if (this.waiting) {
+					return;
+				}
+
 				if (context !== "type" && context !== "markerInput") {
 					let event = handler(game);
 

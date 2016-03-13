@@ -34,6 +34,10 @@ export default class Tile {
 		let baseChar = this._character;
 
 		if (this.lighting.length) {
+			if (this.particle) {
+				return this.particle.character;
+			}
+			
 			if (this.lava > 20) {
 				baseChar = "*";
 			} else if (this.lava) {
@@ -70,6 +74,10 @@ export default class Tile {
 		}
 
 		if (this.lighting.length) {
+			if (this.particle) {
+				return this.particle.color;
+			}
+
 			let col = new Color(baseColor, ...this.lighting.map(light => light.color));
 			col.a = this.lighting.reduce((a, source) => {
 				return a += source.strength;
@@ -186,6 +194,15 @@ export default class Tile {
 
 		this.backgroundColor = new Color(bgChannel, bgChannel, bgChannel);
 		this.color = new Color(fgChannel, fgChannel, fgChannel);
+	}
+
+	get particle() {
+		return this._particle;
+	}
+
+	set particle(p) {
+		this._particle = p;
+		this.render();
 	}
 
 	replace(tile) {

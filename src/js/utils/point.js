@@ -55,6 +55,10 @@ export default class Point {
 		return new Point(this.x + other.x, this.y + other.y);
 	}
 
+	ceil() {
+		return new Point(Math.ceil(this.x), Math.ceil(this.y));
+	}
+
 	clone() {
 		return new Point(this);
 	}
