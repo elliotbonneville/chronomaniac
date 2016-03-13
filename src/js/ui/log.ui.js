@@ -32,7 +32,7 @@ export default class LogUI extends UI {
 
 	message() {
 		// no more messages after the game's over! That wouldn't be sensical
-		if (game.won || game.lost) {
+		if (this.settings.game.won || this.settings.game.lost) {
 			return;
 		}
 

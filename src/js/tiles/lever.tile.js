@@ -48,7 +48,7 @@ export default class LeverTile extends Tile {
 				return false;
 			}
 			
-			return Math.abs(lever.thrownTime - this.thrownTime) < 2;
+			return Math.abs(lever.thrownTime - this.thrownTime) < 3;
 		});
 
 		if (recentlyThrownLevers.length === 3) {

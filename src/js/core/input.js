@@ -1,5 +1,6 @@
 import Mousetrap from "mousetrap";
 import Point from "~/utils/point";
+import Rect from "~/utils/rect";
 
 import * as camera from "~/tools/camera";
 import MoveAction from "~/actor/actions/move.action";
@@ -54,6 +55,49 @@ let input = {
 			},
 			"enter": game => {
 				input.initiateMarkerInput();
+				return {
+					occurred: false
+				};
+			},
+			"?": game => {
+				game.outerBox.clear();
+				["Controls: ",
+				 "",
+				 "Standard roguelike controls apply.",
+				 "",
+				 "'>': Travel forward in time.",
+				 "'<': Travel backward in time.",
+				 "'?': Show this screen. *snicker*",
+				 "<enter>: Place temporal marker.",
+				 "<space>: Throw a lever.",
+				 "",
+				 "The goal of the game is to throw",
+				 "four levers (represented by '/')",
+				 "at the same time. If you can't",
+				 "figure out how to do this, you're",
+				 "not thinking temporally! If you're",
+				 "seen by a past self, the future",
+				 "you are in will collapse and",
+				 "control will revert to that self.",
+				 "Don't get seen! And don't try to",
+				 "swim in the lava. It's hot.",
+				 "",
+				 "<escape> to go back."].forEach((sentence, i) => {
+					game.outerBox.drawLabel(new Point(1, i + 1), sentence);
+				});
+				input.setContext("help screen");
+				return {
+					occurred: false
+				};
+			}
+		},
+
+		"help screen": {
+			escape: () => {
+				input.setContext("walk");
+				game.outerBox.drawBox(new Rect(0, 0, 34, 24));
+				game.render();
+
 				return {
 					occurred: false
 				};

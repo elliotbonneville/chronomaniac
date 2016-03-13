@@ -26,6 +26,9 @@ export default class Map extends EventHandler {
 			height: 30
 		}, options);
 
+		this.options.height = 30;
+		this.options.width = 60;
+
 		this.lighting = {};
 		this.memory = {};
 		this.tiles = [];

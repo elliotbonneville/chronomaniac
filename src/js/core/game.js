@@ -50,7 +50,8 @@ export default class Game {
 		// });
 		this.log = new LogUI({
 			width: 50,
-			height: 10
+			height: 10,
+			game: this
 		});
 
 		this.outerBox = new UI({
@@ -87,6 +88,15 @@ export default class Game {
 		this.player = new Player(this.map, playerTile);
 		this.lamp = new Light(playerTile, 6, new Color("white"));
 
+		this.log.message("Welcome to Chronomaniac!",
+			"",
+			"You need time juice for your Watch. In order to",
+			"get it, you've come to the Caves of Gufmicken,",
+			"where four levers guard the powerful Gufmicken",
+			"Time Machine. Steal its temporal energy by", 
+			"activating it and using your Watch to drain it!",
+			"                  <? for help>");
+
 		this.render();
 	}
 
@@ -116,6 +126,14 @@ export default class Game {
 	}
 
 	tick() {
+		if (this.currentTick == 3 && !this.didFireWelcomeMessage) {
+			this.log.message("",
+				"Oh, I almost forgot -- you'll need to flip",
+				"all four levers at the same time. It is a time",
+				"machine, after all! Have fun and don't get seen.");
+			this.didFireWelcomeMessage = true;
+		}
+
 		this.currentTick++;
 		this.map.tick(this.currentTick + this.startTime);
 		
@@ -258,6 +276,7 @@ export default class Game {
 			}, 400);
 
 		this.animatingCamera = true;
+		this.input.waiting = true;
 
 		// update lighting
 		this.render();
