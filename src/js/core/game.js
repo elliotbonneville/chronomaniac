@@ -108,7 +108,7 @@ export default class Game {
 	
 		this.map.light.update();
 		this.map.light.calculate(this.lamp);
-		this.centerCamera();
+		this.centerCamera(this.player.position);
 
 		// update UIs
 		this.infoPanel.draw();
@@ -162,15 +162,7 @@ export default class Game {
 		}
 
 		// make sure that only levers that have already been thrown stay that way
-		this.map.levers.forEach(lever => {
-			if (lever.thrownTime > this.currentTick) {
-				lever.unthrowLever();
-			} else if (lever.thrownTime !== null && 
-				lever.thrownTime <= this.currentTick && 
-				!lever.leverThrown) {
-				lever.throwLever(undefined, true);
-			}
-		});
+		this.updateLevers();
 
 		// play all actors from beginning of time up until this tick
 		this.actors.forEach(actor => actor.timeline.replayUntil(this.currentTick));
@@ -185,6 +177,95 @@ export default class Game {
 		}));
 
 		this.render();
+	}
+
+	resolveParadox(actor, currentParadox) {
+		this.input.waiting = true;
+
+		let oldPos = this.player.position;
+		this.centerCamera(oldPos);
+		this.player.remove();
+			
+		this.player = actor;
+		this.player.color = new Color("white");
+
+		// loop through actors including this one and remove them from the map and
+		// the future, because their timeline has been actually completely erased
+		let i = this.actors.indexOf(actor),
+			end = this.actors.length;
+
+		while (i < end) {
+			if (this.actors[i] !== this.player) {
+				this.actors[i].remove();
+			}
+
+			this.map.levers.forEach(lever => {
+				if (lever.thrower == this.actors[i]) {
+					lever.thrower = null;
+					lever.thrownTime = null;
+					
+					this.updateLevers();
+				}
+			});
+
+			i++;
+		}
+
+		this.actors.length = this.actors.indexOf(actor);
+
+		actor.timeline.clearFuture();
+		this.log.message("Your temporal paradox collapse alert chimes...");
+
+		if (currentParadox) {
+			this.log.message("You suddenly remember watching yourself vanish",
+				"as you feel reality warping around you, time",
+				"itself bending to set things right.");
+		} else {
+			this.log.message("You ruefully realize you made a paradox earlier",
+				"as the walls of reality collapse about you.");
+		}
+
+		// animate the position of the viewport to the other player
+		i = 0;
+
+		let steps = 5,
+			lastPos = oldPos,
+			interval = setInterval(() => {
+				i++;
+
+				let pos = oldPos.interpolate(this.player.position, i / steps);
+
+				while (pos.equals(lastPos)) {
+					i++;
+					pos = oldPos.interpolate(this.player.position, i / steps);
+				}
+
+				this.centerCamera(pos, true);
+				lastPos = pos;
+				if (i === steps) {
+					clearInterval(interval);
+					this.animatingCamera = false;
+					this.input.waiting = false;
+					return;
+				}
+			}, 400);
+
+		this.animatingCamera = true;
+
+		// update lighting
+		this.render();
+	}
+
+	updateLevers() {
+		this.map.levers.forEach(lever => {
+			if (lever.thrownTime > this.currentTick) {
+				lever.unthrowLever();
+			} else if (lever.thrownTime !== null && 
+				lever.thrownTime <= this.currentTick && 
+				!lever.leverThrown) {
+				lever.throwLever(undefined, true);
+			}
+		});
 	}
 
 	updateMemories() {
@@ -222,13 +303,17 @@ export default class Game {
 		this.won = true;
 	}
 
-	centerCamera() {
+	centerCamera(position, override) {
+		if (this.animatingCamera && !override) {
+			return;
+		}
+
 		// update the camera's position so that the player is centered
 		let view = this.display.views.map,
 			halfWidth = Math.round(view.rect.width / 2),
 			halfHeight = Math.round(view.rect.height / 2);
 
 		view.origin = view.rect.bottomRight
-			.subtract(this.player.position.add(halfWidth + 1, halfHeight + 1));
+			.subtract(position.add(halfWidth + 1, halfHeight + 1));
 	}
 }

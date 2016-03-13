@@ -87,6 +87,17 @@ export default class Point {
 			this.y < rect.bottomRight.y;
 	}
 
+	interpolate(other, n) {
+		if (!(other instanceof Point)) {
+			throw new TypeError("Point.interpolate expects to be passed a Point!");
+		}
+
+		let dx = other.x - this.x,
+			dy = other.y - this.y;
+
+		return new Point(this.x + Math.round(dx * n), this.y + Math.round(dy * n));
+	}
+
 	manhattan(other) {
 		return(Math.abs(this.x - other.x) + Math.abs(this.y - other.y));
 	}
