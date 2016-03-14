@@ -12,9 +12,9 @@ export default class Display {
 			width: 50,
 			height: 50,
 			padding: 12,
-			cellWidth: 16,
-			cellHeight: 22,
-			fontSize: 24
+			cellWidth: 14,
+			cellHeight: 20,
+			fontSize: 20
 		}, settings));
 
 		buffer.settings = Object.assign(buffer.settings, settings);
@@ -25,7 +25,7 @@ export default class Display {
 
 		let {width, height, cellWidth, cellHeight, padding} = this.settings,
 			frag = document.createDocumentFragment();
-
+			
 		// create elements to render to
 		for (let x = 0; x < width; x++) {
 			for (let y = 0; y < height; y++) {
@@ -34,7 +34,7 @@ export default class Display {
 				node.style.height = cellHeight + "px";
 				node.style.width = cellWidth + "px";
 				node.style.textAlign = "center";
-				node.style.lineHeight = (cellHeight + 7) + "px";
+				node.style.lineHeight = (cellHeight + 5) + "px";
 				node.style.fontFamily = "VideoTerminalScreen";
 				node.style.fontSize = this.settings.fontSize + "px";
 				node.style.display = "none";
